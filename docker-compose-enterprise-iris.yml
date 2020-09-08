@@ -13,7 +13,7 @@ services:
         condition: service_healthy
     container_name: htapui
     hostname: htapui
-    image: ${DOCKER_REPO}:ui-version-${TAG}
+    image: intersystemsdc/irisdemo-demo-htap:ui-version-2.5.0
     ports:
     - "10000:4200" # Where Node Will be listening
 
@@ -21,7 +21,7 @@ services:
     # We can't use clean IRIS because its HEALTHCHECK period is too long.
     # So the downloadiris.sh script builds a new image that fixes the HEALTHCHECK
     # and pushes it to our private repository so we can pull it here.
-    image: amirsamary/irisdemo/iris.2019.3.0-latest
+    image: intersystems/iris:2020.1.0.215.0
     hostname: htapirisdb
     command: --key /irislicense/iris.key
     init: true
