@@ -4,13 +4,12 @@
 # pull it form the Docker Store with your DockerHub username and password. If you are an
 # InterSystems employee
 
-version: '2.4'
+version: '3.7'
 
 services:
   htapui:
     depends_on:
-      htapmaster:
-        condition: service_healthy
+      - htapmaster
     container_name: htapui
     hostname: htapui
     image: intersystemsdc/irisdemo-demo-htap:ui-version-2.5.0
@@ -27,7 +26,7 @@ services:
     init: true
     container_name: htapirisdb
     ports:
-    - "10001:52773" # 52773 is the webserver/management portal port: http://localhost:9092/csp/sys/UtilHome.csp
+    - "10001:52773" # 52773 is the webserver/management portal port: http://localhost:10001/csp/sys/UtilHome.csp
     volumes:
     - type: bind
       source: ./IRISLicense/
@@ -36,16 +35,15 @@ services:
 
   htapmaster:
     depends_on: 
-      htapirisdb:
-        condition: service_healthy
+      - htapirisdb
     container_name: htapmaster
     hostname: htapmaster
     init: true
-    image: intersystemsdc/irisdemo-demo-htap:ui-version-2.5.0
+    image: intersystemsdc/irisdemo-demo-htap:master-version-2.5.0
     ports:
       - "10002:8080" # Where Springboot Will be listening
     environment:
-      - MASTER_SPEEDTEST_TITLE=SpeedTest | IRIS 2019.3.0.309.0
+      - MASTER_SPEEDTEST_TITLE=SpeedTest | IRIS 2020.1.0.215.0
       - START_CONSUMERS=true
       - DISABLE_JOURNAL_FOR_DROP_TABLE=true
       - DISABLE_JOURNAL_FOR_TRUNCATE_TABLE=true
@@ -58,12 +56,11 @@ services:
       - CONSUMER_JDBC_USERNAME=SuperUser
       - CONSUMER_JDBC_PASSWORD=sys
       - CONSUMER_THREADS_PER_WORKER=1
-      - CONSUMER_TIME_BETWEEN_QUERIES_IN_MILLIS=10
+      - CONSUMER_TIME_BETWEEN_QUERIES_IN_MILLIS=0
 
   ingest-worker1:
     depends_on: 
-      htapmaster:
-        condition: service_healthy
+      - htapmaster
     container_name: ingest-worker1
     hostname: ingest-worker1
     init: true
@@ -76,8 +73,7 @@ services:
 
   query-worker1:
     depends_on: 
-      htapmaster:
-        condition: service_healthy
+      - htapmaster
     container_name: query-worker1
     hostname: query-worker1
     init: true
