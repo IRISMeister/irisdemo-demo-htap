@@ -12,6 +12,10 @@ rm -f /ICMDurable/license/replace_this_file_with_your_iris_key
 
 deployirisWorkarounds
 
+icm ssh --role DM -command "echo vm.nr_hugepages=$NR_HUGE_PAGES | sudo tee -a /etc/sysctl.conf" 
+icm ssh --role DM -command "echo $NR_HUGE_PAGES | sudo tee /proc/sys/vm/nr_hugepages" 
+exit_if_error "Huge pages configuration failed"
+
 if [ "$CONTAINERLESS" == "true" ];
 then
     icm scp --role DM -localPath $IRIS_KIT_LOCAL_PATH -remotePath $IRIS_KIT_REMOTE_PATH
