@@ -1,5 +1,5 @@
 [config]
-globals=0,0,12000,0,0,0
+globals=0,0,10000,0,0,0
 gmheap=1048576
 routines=512
 locksiz=16777216
