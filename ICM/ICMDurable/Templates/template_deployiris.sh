@@ -12,9 +12,11 @@ rm -f /ICMDurable/license/replace_this_file_with_your_iris_key
 
 deployirisWorkarounds
 
-icm ssh --role DM -command "echo vm.nr_hugepages=$NR_HUGE_PAGES | sudo tee -a /etc/sysctl.conf" 
-icm ssh --role DM -command "echo $NR_HUGE_PAGES | sudo tee /proc/sys/vm/nr_hugepages" 
-exit_if_error "Huge pages configuration failed"
+if [ -n "$NR_HUGE_PAGES" ]; then
+    icm ssh --role DM -command "echo vm.nr_hugepages=$NR_HUGE_PAGES | sudo tee -a /etc/sysctl.conf" 
+    icm ssh --role DM -command "echo $NR_HUGE_PAGES | sudo tee /proc/sys/vm/nr_hugepages" 
+    exit_if_error "Huge pages configuration failed"
+fi
 
 if [ "$CONTAINERLESS" == "true" ];
 then
