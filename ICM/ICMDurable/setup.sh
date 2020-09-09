@@ -203,7 +203,8 @@ fi
 globalBuffers8kMb=$(cat $DEPLOYMENT_FOLDER/merge.cpf | awk -F, '/^globals=/{ print $3 }')
 routineBuffersMb=$(cat $DEPLOYMENT_FOLDER/merge.cpf | awk -F= '/^routines=/{ print $2 }')
 buffersMb=$(($globalBuffers8kMb + $routineBuffersMb))
-NR_HUGE_PAGES=$(($buffersMb + $buffersMb / 5)) # Adding 5% 
+#NR_HUGE_PAGES=$(($buffersMb + $buffersMb / 5)) # Adding 5% 
+NR_HUGE_PAGES=$(cat $DEPLOYMENT_FOLDER/merge.cpf | awk -F= '/^speedtesthugepages=/{ print $2 }')
 echo "export NR_HUGE_PAGES=$NR_HUGE_PAGES" >> $DEPLOYMENT_FOLDER/env.sh
 
 #
