@@ -6,7 +6,7 @@
 (有効なWRCアカウントが必要です)
 
 2) ICM実行可能なec2インスタンス作成
-下記ymlでCloudFormationのstackを作成
+こちらの記事(https://jp.community.intersystems.com/node/480741/translation)を参考に、下記ymlでCloudFormationのstackを作成
 https://raw.githubusercontent.com/IRISMeister/icm_cloudformation/master/icm.yml
 さきほどのtokenを使用する。
 
