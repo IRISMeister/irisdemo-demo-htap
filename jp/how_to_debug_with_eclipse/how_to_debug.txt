@@ -1,5 +1,5 @@
 前提
- Windows 10にて下記を動作させる
+ Windows 10(ip address: 192.168.11.9)にて下記を動作させる
    Eclipse
    Ubuntu 18.04LTS (VMWAREの仮想マシン), ip address: 192.168.11.48
 
@@ -32,6 +32,7 @@ ICM/ICMDurable/utils.shのfind_iris_database_size()を修正。初期DB拡張サ
 
 IRISLicense/iris.key(コンテナ用)を配置する。(これが無いとhtapirisdbが異常終了する)
 
+ingest-worker1以外を起動する。
 user@ubuntu:~/git/irisdemo-demo-htap$ docker-compose -f docker-compose-enterprise-iris.yml up -d  htapirisdb htapmaster htapui query-worker1
 Creating network "irisdemo-demo-htap_default" with the default driver
 Creating htapirisdb ... done
@@ -65,7 +66,7 @@ Debug ConfigurationsでSpring Boot Appを作成する。
 - Environmentを追加
 start_ingestion_worker.shを参考に。
 (https://github.com/IRISMeister/irisdemo-demo-htap/blob/master/standalone_scripts/iris-jdbc/start_ingestion_worker.sh)
-HOSTNAME	192.168.11.4   (Windows10のIP)
+HOSTNAME	192.168.11.9   (Windows10のIP)
 MASTER_HOSTNAME	192.168.11.48  (VMWARE上のLinuxのIP)
 MASTER_PORT	10002
 MODE	run  これしないとバックグラウンドになる
@@ -99,7 +100,7 @@ query-workerをWindows+Eclipseでデバッグ実行する方法。
       - CONSUMER_JDBC_URL=jdbc:IRIS://192.168.11.48:51773/USER
 
 その他はingestと同様。
-
+query-worker1以外を起動する。
 user@ubuntu:~/git/irisdemo-demo-htap$ docker-compose -f docker-compose-enterprise-iris.yml up -d  htapirisdb htapmaster htapui ingest-worker1
 
 2) 同様
@@ -117,7 +118,7 @@ Debug ConfigurationsでSpring Boot Appを作成する。
 start_ingestion_worker.shを参考に。
 (https://github.com/IRISMeister/irisdemo-demo-htap/blob/master/standalone_scripts/iris-jdbc/start_query_worker.sh)
 
-HOSTNAME	192.168.11.5   (Windows10のIPアドレス)
+HOSTNAME	192.168.11.9   (Windows10のIPアドレス)
 MASTER_HOSTNAME	192.168.11.48
 MASTER_PORT	10002
 MODE	run  これしないとバックグラウンドになる
