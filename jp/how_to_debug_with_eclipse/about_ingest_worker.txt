@@ -6,7 +6,7 @@ workerSemaphore.green()は中止ボタン及び処理時間の経過により0�
 com.irisdemo.htap.worker.iris.IRISWorker
 startOneFeed()
 
-	workerDBUtils.initializeRandomMapping(connection);　ランダムに1000*カラム数分のデータを作成
+	workerDBUtils.initializeRandomMapping(connection);　ランダムにカラム数(18個)*1000のデータを作成
 	・
 	・
     	while(workerSemaphore.green())
