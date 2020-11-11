@@ -1,0 +1,101 @@
+Ingest workerとQuery workerの2種類をEclipseのプロジェクトとしてメンテナンスする際の手順
+(空のワークスペースにgit cloneしたEclipse projectを認識させる手順)
+
+C:\temp>git clone https://github.com/intersystems-community/irisdemo-demo-htap.git
+以下、Ingest worker, Query worker各々についてインポート手順を示す。
+
+1) Ingest workerについて
+下記の2つから構成される。
+- ingest-controller-module-1.0.0.jar
+- iris-jdbc-ingest-worker-1.0.0.jar	(主な修正候補)
+
+-------------------------------------
+- ingest-controller-module-1.0.0.jar
+デバッグ対象がこのjarを使っているのでStep Into出来るようビルドしておくと便利。
+Open Projects from file systems
+ Import source 
+	C:\temp\irisdemo-demo-htap\image-ingest-worker\projects\ingest-worker-project\ingest-controller-module
+	Project Name:ingest-controller-module
+ Build実行
+	Project選択状態+右クリック RunAs 
+	  Marven clean 	(targetのクリア)
+	  Marven install	(build & target作成)   ingest-controller-module-1.0.0.jar
+
+-------------------------------------
+- iris-jdbc-ingest-worker-1.0.0.jar
+Open Projects from file systems
+ Import source 
+	C:\temp\irisdemo-demo-htap\image-ingest-worker\projects\ingest-worker-project\iris-jdbc-ingest-worker
+	Project Name:iris-jdbc-ingest-module (in iris-jdbc-ingest-worker)
+
+ JDBCの登録
+ pom.xmlが参照しているIRIS JDBCドライバは手動で追加する必要あり。
+ (See how_to_add_iris_jdbc_to_eclipse_builtin_mvn_repo.txt)
+
+ Build実行
+	RunAs 
+	  Marven clean 	
+	  Marven install	   iris-jdbc-ingest-worker-1.0.0.jar
+
+　このiris-jdbc-ingest-worker-1.0.0.jarファイルはdocker-compose-enterprise-iris.ymlでingest-worker1を動かすimage: intersystemsdc/irisdemo-demo-htap:iris-jdbc-ingest-worker-version-2.5.0に含まれるapp.jarになる。
+  Linixであれば、build.shを実行すればmvn buildからimage作成まで実行してくれる。  
+
+	build.sh
+	  build_java_project "image-ingest-worker"
+	buildtools.sh
+	  build_java_project()
+
+		VERSION=`cat ./VERSION`
+		DOCKER_TAG="version-${VERSION}"
+		IMAGE_NAME=${JAR_FILE%*.jar}-${DOCKER_TAG}
+		IMAGE_FULL_NAME=intersystemsdc/irisdemo-demo-htap:${IMAGE_NAME}
+		docker build --build-arg VERSION=${DOCKER_TAG} -t ${IMAGE_FULL_NAME} ./$1
+
+  Windowsでは...上記のshellの内容を手作業することになる。最終的にはイメージ作成する必要があるので、ソースの修正はLinuxで実施したほうが楽。
+　以下、build.shを参考に、Windowsで手作業で実行する方法。
+
+	さきほどeclipseでbuildしたjarファイルをapp.jarにリネームしてコピー。
+	cd C:\temp\irisdemo-demo-htap\image-ingest-worker\projects
+	copy ingest-worker-project\iris-jdbc-ingest-worker\target\iris-jdbc-ingest-worker-1.0.0.jar .\app.jar
+	イメージ作成(docker for windowsで動くかは未確認)
+	docker build --build-arg VERSION=version-2.5.0 -t intersystemsdc/irisdemo-demo-htap:iris-jdbc-ingest-worker-version-2.5.0 ./image-ingest-worker
+
+  注意)自分で修正・ビルドしたイメージをクラウドで実行する場合は、イメージのレポジトリ名をintersystemsdc/irisdemo-demo-htapから
+  自分がpushできるレポジトリ名に変更すること。
+  このイメージは、ICM/ICMDurable/utils.sh内で使用されるので、そのレポジトリ名も合わせて修正する。
+  
+======================================================================================================
+
+2) Query workerについて
+下記の2つから構成される。
+- query-controller-module-1.0.0.jar
+- iris-jdbc-query-worker-1.0.0.jar　　　(主な修正候補)
+
+-------------------------------------
+- query-controller-module-1.0.0.jar
+デバッグ対象がこのjarを使っているのでStep Into出来るようビルドしておくと便利。
+
+Open Projects from file systems
+ Import source 
+	C:\temp\irisdemo-demo-htap\image-query-worker\projects\query-worker-project\query-controller-module
+	Project Name:query-controller-module
+
+ Build実行
+	Project選択状態+右クリック RunAs 
+	  Marven clean 
+	  Marven install	query-controller-module-1.0.0.jar
+
+-------------------------------------
+- iris-jdbc-query-worker-1.0.0.jar
+Open Projects from file systems
+ Import source 
+	C:\temp\irisdemo-demo-htap\image-query-worker\projects\query-worker-project\iris-jdbc-query-worker
+	Project Name:iris-jdbc-query-worker
+
+ Build実行
+	Project選択状態+右クリック RunAs 
+	  Marven clean 	
+	  Marven install	   iris-jdbc-query-worker-1.0.0.jar
+
+　このiris-jdbc-query-worker-1.0.0.jarファイルはdocker-compose-enterprise-iris.ymlでquery-worker1を動かすimage: intersystemsdc/irisdemo-demo-htap:iris-jdbc-query-worker-version-2.5.0に含まれるapp.jarになる。
+  ingest同様に、Linixであれば、build.shを実行すればmvn buildからimage作成まで実行してくれる。  

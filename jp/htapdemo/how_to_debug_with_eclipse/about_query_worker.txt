@@ -1,0 +1,62 @@
+https://github.com/IRISMeister/irisdemo-demo-htap/blob/799a53ea7aaa3b0dd1c0634d1a69a38f66f629f7/image-query-worker/projects/query-worker-project/iris-jdbc-query-worker/src/main/java/com/irisdemo/htap/worker/iris/IRISWorker.java#L69
+
+開始ボタン押下後に動くロジックはこれだけ。
+workerSemaphore.green()は中止ボタン及び処理時間の経過により0になる。→Ingestion終了。待機。
+
+
+IDs[]には指定したキーの数(既定:8)の配列に下記のようにシャッフルされて設定されている。
+シャッフルはメインループの外にあるので、実際SELECTされるのは、この中のIDs[0]～IDs[3]の4個のみ。
+IDs[0]="W1A3"
+IDs[1]="W1A0"
+	・
+	・
+IDs[6]="W1A7"
+IDs[7]="W1A1"
+
+
+com.irisdemo.htap.worker.iris.IRISWorker.
+startOneConsumer()
+
+while(workerSemaphore.green())
+{
+	for (idIndex = 0; idIndex<4; idIndex++)  <= keyをいくつにしても実際には4個しかSELECTしていない。BUG?
+	{					
+		t0 = System.currentTimeMillis();
+		preparedStatement.setString(1, IDs[idIndex]);
+		rs = preparedStatement.executeQuery();
+		
+		t1= System.currentTimeMillis();
+		
+		/* 
+		 * The customer said that it is not fair if we just read the data and
+		 * don't do anything with it. So we will just compute the approximate size of
+		 * the data we have read to show "proof of work".
+		 */
+		
+		rsmd = rs.getMetaData();
+                rowSizeInBytes=0;
+                rowCount=0;
+		
+                t2= System.currentTimeMillis();                
+                
+                colnumCount = rsmd.getColumnCount();
+                
+                while (rs.next()) 
+                {
+                	rowCount++;
+                    for (int column=1; column<=colnumCount; column++) 
+                    {
+                    	// Approximate size
+                    	rowSizeInBytes += rs.getString(column).getBytes().length;
+                    }
+                 }
+		 t3= System.currentTimeMillis();
+		 
+		 accumulatedMetrics.addToStats(t3-t0, rowCount, rowSizeInBytes);
+	}
+	
+	if (config.getConsumptionTimeBetweenQueriesInMillis()>0)
+	{
+		Thread.sleep(config.getConsumptionTimeBetweenQueriesInMillis());
+	}
+}

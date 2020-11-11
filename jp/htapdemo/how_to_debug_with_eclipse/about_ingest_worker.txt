@@ -1,0 +1,43 @@
+https://github.com/IRISMeister/irisdemo-demo-htap/blob/799a53ea7aaa3b0dd1c0634d1a69a38f66f629f7/image-ingest-worker/projects/ingest-worker-project/iris-jdbc-ingest-worker/src/main/java/com/irisdemo/htap/worker/iris/IRISWorker.java#L43
+
+開始ボタン押下後に動くロジックはこれだけ。
+workerSemaphore.green()は中止ボタン及び処理時間の経過により0になる。→Ingestion終了。待機。
+
+com.irisdemo.htap.worker.iris.IRISWorker
+startOneFeed()
+
+	workerDBUtils.initializeRandomMapping(connection);　ランダムに1000*カラム数分のデータを作成
+	・
+	・
+    	while(workerSemaphore.green())
+    	{
+    		currentBatchSize = 0;
+    		batchSizeInBytes = 0;
+    		
+    		while(workerSemaphore.green())
+    		{
+    			if (currentBatchSize==config.getIngestionBatchSize()) 
+    				break;
+
+    			ランダム値を保存したデータ(paramRandomValues)から値を取り出しpreparedStatement.setObject()を実行
+    			batchSizeInBytes+= WorkerDBUtils.pupulatePreparedStatement(parameterCount, ++recordNum, threadPrefix, preparedStatement);
+    		
+    			preparedStatement.addBatch();
+    			preparedStatement.clearParameters();
+    			currentBatchSize++;	    			
+    		}
+
+		if(workerSemaphore.green())
+		{
+			preparedStatement.executeBatch();
+			preparedStatement.clearBatch();
+			connection.commit();
+			accumulatedMetrics.addToStats(currentBatchSize, batchSizeInBytes);
+
+			if (config.getIngestionWaitTimeBetweenBatchesInMillis()>0)
+			{
+				Thread.sleep(config.getIngestionWaitTimeBetweenBatchesInMillis());
+			}
+		}
+    	}	
+

@@ -1,0 +1,180 @@
+◎事前準備
+1) Linux用の評価ライセンスキーファイルiris.key (container用ではありません)をWRC Evaluation等から入手しておく。
+
+◎ICM動作環境のセットアップ
+1) containers.intersystems.comでtokenを取得。記録しておく。
+(有効なWRCアカウントが必要です)
+
+2) ICM実行可能なec2インスタンス作成
+下記ymlでCloudFormationのstackを作成
+https://raw.githubusercontent.com/IRISMeister/icm_cloudformation/master/icm.yml
+さきほどのtokenを使用する。
+
+3) 作成されたec2にsshする。以下、ec2での操作
+username: ec2-user
+下記コマンドでaws cliの正常動作を確認
+[ec2-user@ip-172-31-35-121 ~]$ aws ec2 describe-instances
+
+4) iris kitの入手。
+$ git clone https://github.com/IRISMeister/icm_keyless.git
+$ WRC_USERNAME='有効なWRCユーザ名' WRC_PASSWORD='yyy' kit='IRIS-2020.1.0.215.0-lnxubuntux64.tar.gz' icmkit='icm-2020.1.0.215.0-docker.tar.gz' ./icm_keyless/getkits.sh
+
+5) SpeedTestのデプロイ準備
+$ git clone https://github.com/IRISMeister/irisdemo-demo-htap.git
+$ mv ~/IRIS-2020.1.0.215.0-lnxubuntux64.tar.gz irisdemo-demo-htap/ICM/ICMDurable/IRISKit/
+  (事前準備で用意したiris.keyが~/に存在すると仮定して)
+$ mv ~/iris.key irisdemo-demo-htap/ICM/ICMDurable/license/
+$ cp ~/.aws/credentials irisdemo-demo-htap/ICM/ICMDurable/aws.credentials
+(credentialsは空のファイルでも良い)
+
+◎SpeedTestのデプロイ実行手順
+5段階からなる。
+1) icm起動
+2) setup.shにより実行用シェルを作成
+3) provision.shにより、AWSのEC2インスタンスを作成
+4) deployiris.shにより、IRISおよびアプリケーション用のS/W環境の作成
+5) deployspeedtest.shにより、アプリケーションの実行
+
+1) icm起動
+[ec2-user@ip-172-31-45-31 ~]$ cd irisdemo-demo-htap/ICM
+[ec2-user@ip-172-31-45-31 ICM]$ ./icm.sh
+
+2) setup.shにより実行用シェルを作成
+# cd ICMDurable
+/ICMDurable # ./setup.sh
+
+以下、ユーザの入力項目は[]で示す。間違えたらCtrl+cで終了して、最初から再実行。
+Please enter with the label for your ICM machines (ex: asamaryTest1): [mytest]]
+Do you want IRIS with Mirroring (answer yes or something else if not)?: [a]
+How many Speed Test Masters do you want?: [1]
+How many Ingestion Workers per Master?: [1]
+How many Query Workers per Master?: [1]
+Please enter with the AWS instance type:
+         1 - i3.xlarge io1 70 GB 3500 IOPS
+         2 - m4.2xlarge io1 50 GB 2500 IOPS
+         3 - m5.12xlarge gp2 1000 GB 3000 IOPS
+         4 - m5.2xlarge gp2 500 GB 1500 IOPS
+         5 - m5.2xlarge io1 500 GB 2500 IOPS
+         6 - m5.8xlarge io1 1000 GB 3500 IOPS
+         7 - m5.xlarge io1 100 GB 2500 IOPS
+         8 - r5.2xlarge io1 500 GB 2500 IOPS Scenario 1
+         9 - r5.4xlarge io1 1000 GB 3500 IOPS Scenario 2
+
+Choice: [2]]
+ m4.2xlarge io1 50 GB 2500 IOPS...
+
+Is this going to be a containerless installation of IRIS (answer yes or something else if not)?:[yes]
+ICM configured to provision m4.2xlarge io1 50 GB 2500 IOPS machines on AWS.
+You can now change to /ICMDurable/Deployments/mytest and run ./provision.sh to provision the infrastructure on AWS.
+/ICMDurable #
+
+3) provision.shにより、AWSのEC2ノードを作成
+How many...の入力値を2)にしたがっていれば、EC2が新たに4インスタンス起動される。
+/ICMDurable # cd Deployments/mytest/
+/ICMDurable/Deployments/mytest # ./provision.sh
+EC2の作成が始まる。数分待ち。
+	・
+	・
+	・
+You can run ./deployiris.sh to deploy InterSystems IRIS to the provisioned infrastructure.
+
+/ICMDurable/Deployments/mytest #
+
+4) deployiris.shにより、IRISおよびアプリケーション用のS/W環境の作成
+/ICMDurable/Deployments/mytest # ./deployiris.sh
+数分待ち(選択したインスタンスタイプ次第)
+	・
+	・
+
+...set ICM state on mytest-DM-IRISSpeedTest-0001
+-> Management Portal available at: http://ec2-13-230-172-195.ap-northeast-1.compute.amazonaws.com:52773/csp/sys/UtilHome.csp
+You can run ./deployspeedtest.sh to deploy the Speed Test to the provisioned infrastructure now.
+If you are planning on deploying SAP HANA, AWS Aurora or any other AWS database, deploy them on the VPC_ID vpc-xxxxxxxxxxx.
+
+/ICMDurable/Deployments/mytest #
+
+この段階で、ひとまずManagement Portalへのアクセスが可能であることを確認する。SuperUser/sys 
+
+5) deployspeedtest.shにより、アプリケーションの実行
+/ICMDurable/Deployments/mytest # ./deployspeedtest.sh
+Please, specify which speedtest you want to deploy. Available options are:
+         iris  - InterSystems IRIS
+         hana  - SAP HANA
+         aurora  - AWS Aurora
+         mssqlserver  - AWS RDS SQL Server
+         sybase  - SAP Sybase ASE
+
+[iris]
+Deploying HTAP demo for InterSystems IRIS...
+
+Executing command 'hostname' on host mytest-DM-IRISSpeedTest-0001...
+-> Output in /ICMDurable/Deployments/mytest/state/mytest-DM-IRISSpeedTest/mytest-DM-IRISSpeedTest-0001/ssh.out
+ip-10-0-1-112
+Deploying HTAP Demo MASTER for SpeedTest | InterSystems IRIS...
+
+Pulling image intersystemsdc/irisdemo-demo-htap:master-version-2.5.0 on machine mytest-VM-IRISSpeedTest-0001...
+Executing command 'docker pull intersystemsdc/irisdemo-demo-htap:master-version-2.5.0' on host mytest-VM-IRISSpeedTest-0001...
+Elapsed time for ssh on mytest-VM-IRISSpeedTest-0001: 15s...
+	・
+	・
+数分待ち(選択したインスタンスタイプ次第)
+	・
+	・
+URL to SpeedTest | InterSystems IRIS Speed Test is at:
+        http://35.72.3.216
+If you are planning on deploying SAP HANA, AWS Aurora or any other AWS database, deploy them on the VPC_ID vpc-xxxxxxxxxxx.
+Done!
+
+/ICMDurable/Deployments/mytest #
+これでデプロイ作業はすべて終了。表示されたURLをブラウザで開くとメイン画面が表示される。
+
+◎ベンチマーク実行手順
+==================
+[Settings]を押して、下記を変更(負荷のかけ具合が変わる)
+Data Insertion Threads per workers:4
+Data Querying  Threads per workers:4
+[Update Configuration]押下
+
+[Run Test]押下。
+
+(注意!!!)オリジナル版は初回にデータベースの初期サイズをインスタンスタイプに合わせて拡張しているため、なかなか開始しない。
+07/29/20-03:16:41:928 (21791) 0 [Database.StartExpansion] Starting Expansion for database /irissys/data/IRIS/mgr/speedtest/. 102389 MB requested.
+本バージョンは、サイズを1GB固定に設定してあるので、すぐ開始する(その分、ベンチマークのパフォーマンスは低下する)。
+/irisdemo-demo-htap/ICM/ICMDurable/utils.shのfind_iris_database_size()にてDBの初期サイズを指定しているので、必要なら修正を。
+
+やがて、グラフが更新され始める。
+
+以降、[Run Test]を繰り返し実行可能。
+[Results]で結果をファイル保存可能。
+==================
+
+◎環境の削除手順
+
+テスト完了後、使用した全てのリソースを削除する。
+/ICMDurable/Deployments/mytest # ./unprovision.sh
+Warning: This will delete the existing configuration, including all persistent data volumes.
+Type "yes" to confirm: [yes]
+	・
+	・
+数分待ち
+	・
+	・
+Elapsed time for destroy on mytest-DM-IRISSpeedTest: 195s...
+Elapsed time for destroy on mytest-DM-IRISSpeedTest: 210s...
+...completed destroy of mytest-DM-IRISSpeedTest
+Starting init of mytest-IRISSpeedTest...
+...completed init of mytest-IRISSpeedTest
+Starting refresh of mytest-IRISSpeedTest...
+...completed refresh of mytest-IRISSpeedTest
+Starting destroy of mytest-IRISSpeedTest...
+Elapsed time for destroy on mytest-IRISSpeedTest: 15s...
+...completed destroy of mytest-IRISSpeedTest
+Deleting state
+Deleting instances.json
+/ICMDurable/Deployments/mytest # [ctrl+d]
+Exited icm container
+[ec2-user@ip-172-31-35-121 ICM]$
+
+念のため、AWSのポータルでEC2インスタンスやEBSが消滅していることを確認する。
+
+ICM起動に使用したEC2インスタンスは残っているので、クラウドフォーメーションから削除する。

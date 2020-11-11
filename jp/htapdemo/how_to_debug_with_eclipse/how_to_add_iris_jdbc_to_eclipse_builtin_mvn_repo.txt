@@ -1,0 +1,7 @@
+Project -> RunAs -> Run Configurations...
+
+Goal: 
+install:install-file -Dfile=C:\InterSystems\IRIS\dev\java\lib\JDK18\intersystems-jdbc-3.1.0.jar -DgroupId=com.intersystems -DartifactId=intersystems-jdbc -Dversion=3.1.0 -Dpackaging=jar -DcreateChecksum=true
+
+
+install:install-file -Dfile=C:\InterSystems\IRIS\dev\java\lib\JDK18\intersystems-xep-3.1.0.jar -DgroupId=com.intersystems -DartifactId=intersystems-xep -Dversion=3.1.0 -Dpackaging=jar -DcreateChecksum=true
