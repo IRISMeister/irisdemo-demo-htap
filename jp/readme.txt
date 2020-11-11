@@ -4,7 +4,10 @@ https://github.com/intersystems-community/irisdemo-demo-htap/blob/master/ICM/REA
 
 主な変更点
 Tokyo region用に修正
-DB初期サイズを1GB固定に
+IRIS DB初期サイズを1GB固定に
+docker-compoose-enterprise-iris.ymlで標準のIRISイメージを使用(個別ビルドせず)
+docker-compoose-enterprise-iris.ymlにcpf mergeを追加(初期パスワード指定のため)
+docker-compoose-enterprise-iris.yml使用時のIngestion Thread per workerを1に
 ICM環境はCloudFormationを使用して作成
 
 HowToRunInTokyo.txt

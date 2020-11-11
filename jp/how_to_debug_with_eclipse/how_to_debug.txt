@@ -14,7 +14,7 @@ IRISは、VMWare上のLinux内のコンテナで稼働する。192.168.11.48はV
 
   htapirisdb: 
     ports:
-    - "51773:51773" # For debugging from Windows (Eclipse)
+    - "51773:51773" # Allow JDBC connection from Windows
 
   htapmaster:
       #- INGESTION_JDBC_URL=jdbc:IRIS://htapirisdb:51773/USER
@@ -41,11 +41,9 @@ Creating query-worker1 ... done
 user@ubuntu:~/git/irisdemo-demo-htap$
 
 
-2) IRISのパスワードを設定
-Portal
+2) ポータルを確認
 http://192.168.11.48:10001/csp/sys/%25CSP.Portal.Home.zen
-SuperUser/SYSでログインすると、強制変更を求められるのでパスワードをsysに変更。
-これをしないとJDBCが接続エラーを起こす。
+SuperUser/sys
 
 3) Windows+Eclipseでiris-jdbc-ingest-moduleをデバッグ実行する。
 
@@ -77,8 +75,7 @@ user@ubuntu:~/git/irisdemo-demo-htap$ docker-compose -f docker-compose-enterpris
 
 http://192.168.11.48:10000/ でUIを表示し、アプリを起動。
 
-
-UIが固まるなど、動作がおかしくなったら、全コンテナを再起動してやり直し。
+UIが固まるなど、動作がおかしくなったら、Eclipseのデバッグセッションを終了し、全コンテナを再起動してやり直し。
 user@ubuntu:~/git/irisdemo-demo-htap$ docker-compose -f docker-compose-enterprise-iris.yml restart 
 
 終了方法
@@ -94,7 +91,7 @@ query-workerをWindows+Eclipseでデバッグ実行する方法。
 
   htapirisdb: 
     ports:
-    - "51773:51773" # For debugging from Windows (Eclipse)
+    - "51773:51773" # Allow JDBC connection from Windows
 
   htapmaster:
       - INGESTION_JDBC_URL=jdbc:IRIS://htapirisdb:51773/USER
@@ -105,8 +102,7 @@ query-workerをWindows+Eclipseでデバッグ実行する方法。
 
 user@ubuntu:~/git/irisdemo-demo-htap$ docker-compose -f docker-compose-enterprise-iris.yml up -d  htapirisdb htapmaster htapui ingest-worker1
 
-2) IRISのパスワードを設定
-同様
+2) 同様
 
 3) Windows+Eclipseでiris-jdbc-query-workerをデバッグ実行する。
 

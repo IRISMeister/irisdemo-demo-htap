@@ -1,0 +1,9 @@
+[Startup]
+PasswordHash=a647ce65fda7c09890288ebb8a899b7f48f70fe5,2rv3vp7v
+
+[SQL]
+TimePrecision=6
+SaveMAC=1
+
+[SqlSysDatatypes]
+TIMESTAMP=%Library.PosixTime

@@ -26,12 +26,16 @@ services:
     init: true
     container_name: htapirisdb
     ports:
+    - "51773:51773" # Allow JDBC connection from Windows
     - "10001:52773" # 52773 is the webserver/management portal port: http://localhost:10001/csp/sys/UtilHome.csp
     volumes:
     - type: bind
       source: ./IRISLicense/
       target: /irislicense
-
+    - ./jp/cpf:/cpf
+    environment:
+      - ISC_DATA_DIRECTORY=/home/irisowner/IRIS
+      - ISC_CPF_MERGE_FILE=/cpf/merge.cpf
 
   htapmaster:
     depends_on: 
@@ -47,9 +51,10 @@ services:
       - START_CONSUMERS=true
       - DISABLE_JOURNAL_FOR_DROP_TABLE=true
       - DISABLE_JOURNAL_FOR_TRUNCATE_TABLE=true
-      - INGESTION_THREADS_PER_WORKER=2
+      - INGESTION_THREADS_PER_WORKER=1
       - INGESTION_BATCH_SIZE=1000
-      - INGESTION_JDBC_URL=jdbc:IRIS://htapirisdb:51773/USER
+      #- INGESTION_JDBC_URL=jdbc:IRIS://htapirisdb:51773/USER
+      - INGESTION_JDBC_URL=jdbc:IRIS://192.168.11.48:51773/USER
       - INGESTION_JDBC_USERNAME=SuperUser
       - INGESTION_JDBC_PASSWORD=sys
       - CONSUMER_JDBC_URL=jdbc:IRIS://htapirisdb:51773/USER
@@ -57,6 +62,7 @@ services:
       - CONSUMER_JDBC_PASSWORD=sys
       - CONSUMER_THREADS_PER_WORKER=1
       - CONSUMER_TIME_BETWEEN_QUERIES_IN_MILLIS=0
+      - DATABASE_SIZE_IN_GB=1
 
   ingest-worker1:
     depends_on: 

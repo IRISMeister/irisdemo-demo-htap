@@ -177,7 +177,7 @@ remove_all_containers() {
 find_iris_database_size() {
     
     #export DATABASE_SIZE_IN_GB=`expr $(cat ./defaults.json | awk 'BEGIN { FS = "\"" } /"DataVolumeSize"/ { print $4 }') - 10`
-    export DATABASE_SIZE_IN_GB=10
+    export DATABASE_SIZE_IN_GB=1
 }
 
 deploy()
