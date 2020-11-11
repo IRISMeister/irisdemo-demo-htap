@@ -2,9 +2,10 @@
 https://github.com/intersystems-community/irisdemo-demo-htap
 https://github.com/intersystems-community/irisdemo-demo-htap/blob/master/ICM/README.md (AWS)
 
-Tokyo region用に修正したバージョン
-https://github.com/IRISMeister/irisdemo-demo-htap.git  
-ICM環境はiris-cloudformation\icm.ymlを使用して作成
+主な変更点
+Tokyo region用に修正
+DB初期サイズを1GB固定に
+ICM環境はCloudFormationを使用して作成
 
 HowToRunInTokyo.txt
 デプロイ方法の説明・実行。ベンチ実行。
