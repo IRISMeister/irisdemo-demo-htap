@@ -79,6 +79,12 @@ You can run ./deployiris.sh to deploy InterSystems IRIS to the provisioned infra
 
 /ICMDurable/Deployments/mytest #
 
+起動インスタンス例
+mytest-DM-IRISSpeedTest-0001	i-xxxxxxxxxxxxxxxxx	m4.2xlarge	ap-northeast-1a
+mytest-VM-IRISSpeedTest-0001	i-xxxxxxxxxxxxxxxxx	c5.xlarge	ap-northeast-1a
+mytest-VM-IRISSpeedTest-0002	i-xxxxxxxxxxxxxxxxx	c5.xlarge	ap-northeast-1a
+mytest-VM-IRISSpeedTest-0003	i-xxxxxxxxxxxxxxxxx	c5.xlarge	ap-northeast-1a
+
 4) deployiris.shにより、IRISおよびアプリケーション用のS/W環境の作成
 /ICMDurable/Deployments/mytest # ./deployiris.sh
 数分待ち(選択したインスタンスタイプ次第)
