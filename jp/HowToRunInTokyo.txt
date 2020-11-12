@@ -1,24 +1,24 @@
 ◎事前準備
 1) Linux用の評価ライセンスキーファイルiris.key (container用ではありません)をWRC Evaluation等から入手しておく。
 
-◎ICM動作環境のセットアップ
-1) containers.intersystems.comでtokenを取得。記録しておく。2)で使用する。
+2) containers.intersystems.comでtokenを取得。記録しておく。
 (有効なWRCアカウントが必要です)
 
-2) ICM実行可能なec2インスタンス作成
+◎ICM動作環境のセットアップ
+1) ICM実行可能なec2インスタンス作成
 こちらの記事(https://jp.community.intersystems.com/node/480741)を参考に、下記ymlでCloudFormationのstackを作成
 https://raw.githubusercontent.com/IRISMeister/icm_cloudformation/master/icm.yml
 
-3) 作成されたec2にsshする。以下、ec2での操作
+2) 作成されたec2にsshする。以下、ec2での操作
 username: ec2-user
 下記コマンドでaws cliの正常動作を確認
 [ec2-user@ip-172-31-35-121 ~]$ aws ec2 describe-instances
 
-4) iris kitの入手。
+3) iris kitをダウンロード
 $ git clone https://github.com/IRISMeister/icm_keyless.git
 $ WRC_USERNAME='有効なWRCユーザ名' WRC_PASSWORD='yyy' kit='IRIS-2020.1.0.215.0-lnxubuntux64.tar.gz' icmkit='icm-2020.1.0.215.0-docker.tar.gz' ./icm_keyless/getkits.sh
 
-5) SpeedTestのデプロイ準備
+4) SpeedTestのデプロイ準備
 $ git clone https://github.com/IRISMeister/irisdemo-demo-htap.git
 $ mv ~/IRIS-2020.1.0.215.0-lnxubuntux64.tar.gz irisdemo-demo-htap/ICM/ICMDurable/IRISKit/
   (事前準備で用意したiris.keyが~/に存在すると仮定して)
