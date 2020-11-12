@@ -2,6 +2,9 @@
 https://github.com/intersystems-community/irisdemo-demo-htap
 https://github.com/intersystems-community/irisdemo-demo-htap/blob/master/ICM/README.md (AWS)
 
+日本語でのご紹介資料
+https://www.intersystems.com/isc-resources/wp-content/uploads/sites/24/ESG-Technical-Review-InterSystems-IRIS-June-2020_JP.pdf
+
 主な変更点
 Tokyo region用に修正
 IRIS DB初期サイズを1GB固定に
