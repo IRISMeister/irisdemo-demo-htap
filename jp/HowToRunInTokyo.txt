@@ -68,10 +68,10 @@ You can now change to /ICMDurable/Deployments/mytest and run ./provision.sh to p
 /ICMDurable #
 
 3) provision.shにより、AWSのEC2ノードを作成
-How many...の入力値を2)にしたがっていれば、EC2が新たに4インスタンス起動される。
 /ICMDurable # cd Deployments/mytest/
 /ICMDurable/Deployments/mytest # ./provision.sh
 EC2の作成が始まる。数分待ち。
+How many...の入力値を2)にしたがっていれば、新たに4個のEC2インスタンスが起動される。
 	・
 	・
 	・
