@@ -17,4 +17,5 @@ cd Deployments/quicktest
 rm -f .CNcount
 echo 0 >> .CNcount
 ./provision.sh
-#./deployiris.sh
+./deployiris.sh
+./deployspeedtest.sh
