@@ -20,7 +20,7 @@ services:
     # We can't use clean IRIS because its HEALTHCHECK period is too long.
     # So the downloadiris.sh script builds a new image that fixes the HEALTHCHECK
     # and pushes it to our private repository so we can pull it here.
-    image: intersystems/iris:2020.1.0.215.0
+    image: containers.intersystems.com/intersystems/iris:2020.1.0.215.0
     hostname: htapirisdb
     command: --key /irislicense/iris.key
     init: true
