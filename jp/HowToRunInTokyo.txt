@@ -183,3 +183,20 @@ Exited icm container
 念のため、AWSのポータルでEC2インスタンスやEBSが消滅していることを確認する。
 
 ICM起動に使用したEC2インスタンスは残っているので、クラウドフォーメーションから削除する。
+
+
+◎QuickTest
+インタラクト無しに事前構成通りにSpeedTestをデプロイする
+cd jp
+./run.sh
+
+#icmへのアクセス
+ICM_TAG=$(cat ../ICM/ICMDurable/CONF_ICM_TAG) 
+ICM_REPO=$(cat ../ICM/ICMDurable/CONF_ICM_REPO)
+docker run --rm -it -v $PWD/../ICM/ICMDurable:/ICMDurable --cap-add SYS_TIME $ICM_REPO:$ICM_TAG 
+icm inventory | grep VM-IRISSpeedTest-0001
+
+#停止方法
+docker run --rm -it -v $PWD/../ICM/ICMDurable:/ICMDurable --cap-add SYS_TIME $ICM_REPO:$ICM_TAG 
+cd ICMDurable/Deployments/quicktest/
+./unprovision.sh
