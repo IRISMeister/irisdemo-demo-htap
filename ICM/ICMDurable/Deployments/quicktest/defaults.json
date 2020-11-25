@@ -40,5 +40,5 @@
     "UserCPF": "/ICMDurable/Deployments/quicktest/merge.cpf",
     "Containerless": "true",
     "ISCglobals": "0,0,23552,0,0,0",
-    "KitURL": ""
+    "KitURL": "file://tmp/IRIS-2020.1.0.215.0-lnxubuntux64.tar.gz"
 }
