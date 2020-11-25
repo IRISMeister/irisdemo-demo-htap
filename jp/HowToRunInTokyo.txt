@@ -16,7 +16,8 @@ username: ec2-user
 
 3) iris kitをダウンロード
 $ git clone https://github.com/IRISMeister/icm_keyless.git
-$ WRC_USERNAME='有効なWRCユーザ名' WRC_PASSWORD='yyy' kit='IRIS-2020.1.0.215.0-lnxubuntux64.tar.gz' icmkit='icm-2020.1.0.215.0-docker.tar.gz' ./icm_keyless/getkits.sh
+$ WRC_USERNAME='有効なWRCユーザ名' WRC_PASSWORD='yyy' kit='IRIS-2020.1.0.215.0-lnxubuntux64.tar.gz' ./icm_keyless/getkits.sh
+(cloudformationで使用したWRCトークンではありません。WRCへのログインに使用するパスワードです)
 
 4) SpeedTestのデプロイ準備
 $ git clone https://github.com/IRISMeister/irisdemo-demo-htap.git
