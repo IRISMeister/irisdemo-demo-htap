@@ -35,7 +35,8 @@ hs_err_pid*
 **/State
 **/.terraform/
 **/keys
-**/Deployments
+ICM/ICMDurable/Deployments/*
+!ICM/ICMDurable/Deployments/quicktest
 **/license/*.key
 **/ICM/ICMDurable/*.json
 **/ICM/ICMDurable/merge.cpf
@@ -45,7 +46,6 @@ hs_err_pid*
 *.log
 *.err
 .CNcount
-env.sh
 
 #Java
 
@@ -58,5 +58,4 @@ images_built
 
 # VSCode
 .metals
-.vscode
 IRISLicense/iris.key

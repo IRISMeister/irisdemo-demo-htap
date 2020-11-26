@@ -1,0 +1,17 @@
+
+    [
+        {
+        "Role": "DM",
+        "Count": "2",
+        "LicenseKey": "iris.key"
+        } 
+,
+        {
+            "Role": "VM",
+            "Count": "3",
+            "DataVolumeType": "io1",
+            "DataVolumeSize": "30",
+            "DataVolumeIOPS": "100",
+            "InstanceType": "c5.xlarge"
+        }
+]

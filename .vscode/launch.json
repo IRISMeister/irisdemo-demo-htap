@@ -1,0 +1,121 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-App<hana-jdbc-ingest-worker>",
+            "request": "launch",
+            "mainClass": "com.irisdemo.htap.App",
+            "projectName": "hana-jdbc-ingest-worker"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-App<hana-jdbc-query-worker>",
+            "request": "launch",
+            "mainClass": "com.irisdemo.htap.App",
+            "projectName": "hana-jdbc-query-worker"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-App<iris-jdbc-ingest-worker>",
+            "env": {"HOSTNAME":"192.168.120.128", "MASTER_HOSTNAME":"192.168.120.128","MASTER_PORT":"10002","MODE":"run"},
+            "request": "launch",
+            "mainClass": "com.irisdemo.htap.App",
+            "projectName": "iris-jdbc-ingest-worker"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-App<iris-jdbc-query-worker>",
+            "env": {"HOSTNAME":"192.168.120.128", "MASTER_HOSTNAME":"192.168.120.128","MASTER_PORT":"10002","MODE":"run"},
+            "request": "launch",
+            "mainClass": "com.irisdemo.htap.App",
+            "projectName": "iris-jdbc-query-worker"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-App<iris-xep-ingest-worker>",
+            "request": "launch",
+            "mainClass": "com.irisdemo.htap.App",
+            "projectName": "iris-xep-ingest-worker"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-App<master>",
+            "request": "launch",
+            "mainClass": "com.irisdemo.htap.App",
+            "projectName": "master"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-App<mssqlserver-jdbc-ingest-worker>",
+            "request": "launch",
+            "mainClass": "com.irisdemo.htap.App",
+            "projectName": "mssqlserver-jdbc-ingest-worker"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-App<mssqlserver-jdbc-query-worker>",
+            "request": "launch",
+            "mainClass": "com.irisdemo.htap.App",
+            "projectName": "mssqlserver-jdbc-query-worker"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-App<mysql-jdbc-ingest-worker>",
+            "request": "launch",
+            "mainClass": "com.irisdemo.htap.App",
+            "projectName": "mysql-jdbc-ingest-worker"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-App<mysql-jdbc-query-worker>",
+            "request": "launch",
+            "mainClass": "com.irisdemo.htap.App",
+            "projectName": "mysql-jdbc-query-worker"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-App<postgres-jdbc-ingest-worker>",
+            "request": "launch",
+            "mainClass": "com.irisdemo.htap.App",
+            "projectName": "postgres-jdbc-ingest-worker"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-App<postgres-jdbc-query-worker>",
+            "request": "launch",
+            "mainClass": "com.irisdemo.htap.App",
+            "projectName": "postgres-jdbc-query-worker"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-App<query-controller-module>",
+            "request": "launch",
+            "mainClass": "com.irisdemo.htap.App",
+            "projectName": "query-controller-module"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-App<sybasease-jdbc-ingest-worker>",
+            "request": "launch",
+            "mainClass": "com.irisdemo.htap.App",
+            "projectName": "sybasease-jdbc-ingest-worker"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-App<sybasease-jdbc-query-worker>",
+            "request": "launch",
+            "mainClass": "com.irisdemo.htap.App",
+            "projectName": "sybasease-jdbc-query-worker"
+        }
+    ]
+}
