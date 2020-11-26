@@ -1,20 +1,20 @@
 前提
  Windows 10(ip address: 192.168.11.9)にて下記を動作させる
-   Eclipse
    Ubuntu 18.04LTS (VMWAREの仮想マシン), ip address: 192.168.11.48
+   Eclipseもしくはvscode(remote SSH,Java Extension Pack導入済み)
 
 ====================================================================
 
 ingest-worker(iris-jdbc-ingest-module)をWindows+Eclipseでデバッグ実行する方法。
 
-1) (デバッグ対象である)ingest-worker以外をコンテナ(Linux on VMWARE使用)で起動
-docker-compose-enterprise-iris.ymlを編集。
-ingest-workerが接続するJDBC接続先を示すURLをPCから見えるホスト(htapirisdbはコンテナ内でしか見えない)を指すように変更する。
-IRISは、VMWare上のLinux内のコンテナで稼働する。192.168.11.48はVMWare上でLinuxが稼働している(Windows10から到達可能な)ホスト名/IP。外部からJDBCアクセス可能にするために51773をexposeする。
-
+1) docker-compose-enterprise-iris.ymlを編集する。
+1-1) コンテナの外部からJDBCアクセス可能にするために51773をexposeする。
   htapirisdb: 
     ports:
     - "51773:51773" # Allow JDBC connection from Windows
+
+1-2) ingest-workerが接続するJDBC接続先を示すURLをデバッグ実行する環境から見えるホスト(htapirisdbはコンテナ内からしか見えない)を指すように変更する。
+192.168.11.48はVMWare上で稼働しているLinuxの(Windows10から到達可能な)ホスト名/IP。
 
   htapmaster:
       #- INGESTION_JDBC_URL=jdbc:IRIS://htapirisdb:51773/USER
@@ -32,7 +32,7 @@ ICM/ICMDurable/utils.shのfind_iris_database_size()を修正。初期DB拡張サ
 
 IRISLicense/iris.key(コンテナ用)を配置する。(これが無いとhtapirisdbが異常終了する)
 
-ingest-worker1以外を起動する。
+2) (デバッグ対象である)ingest-worker以外をコンテナ(Linux on VMWARE使用)で起動
 user@ubuntu:~/git/irisdemo-demo-htap$ docker-compose -f docker-compose-enterprise-iris.yml up -d  htapirisdb htapmaster htapui query-worker1
 Creating network "irisdemo-demo-htap_default" with the default driver
 Creating htapirisdb ... done
@@ -41,13 +41,14 @@ Creating htapui        ... done
 Creating query-worker1 ... done
 user@ubuntu:~/git/irisdemo-demo-htap$
 
+下記によりログを見ていると何が起こっているか把握しやすい。
+user@ubuntu:~/git/irisdemo-demo-htap$ docker-compose -f docker-compose-enterprise-iris.yml logs -f htapmaster
 
-2) ポータルを確認
+3) ポータルの正常動作を確認
 http://192.168.11.48:10001/csp/sys/%25CSP.Portal.Home.zen
 SuperUser/sys
 
-3) Windows+Eclipseでiris-jdbc-ingest-moduleをデバッグ実行する。
-
+4) BPの設定場所
 Break Pointを設定
 主なBPのかけどころは...
 ingest-controller-module project
@@ -59,6 +60,8 @@ com.irisdemo.htap.worker.iris.IRISWorker.startOneFeed()   <= ここがメイン�
 
 Unable to install breakpoint（Absent Line Number Information）が出るが無視。
 
+5) デバッグ実行
+5-1) Windows+Eclipseでデバッグ実行する。
 
 Debug ConfigurationsでSpring Boot Appを作成する。
 - Project: iris-jdbc-ingest-module　を選択
@@ -71,28 +74,39 @@ MASTER_HOSTNAME	192.168.11.48  (VMWARE上のLinuxのIP)
 MASTER_PORT	10002
 MODE	run  これしないとバックグラウンドになる
 
-下記によりログを見ていると何が起こっているか把握しやすい。
-user@ubuntu:~/git/irisdemo-demo-htap$ docker-compose -f docker-compose-enterprise-iris.yml logs -f htapmaster
+5-2) vscode+RemoteSSHでデバッグ実行する。
+launch.jsonを参考に、env設定のHOSTNAME,MASTER_HOSTNAMEを共にLinuxのIPになるよう変更する。
+            "name": "Debug (Launch)-App<iris-jdbc-ingest-worker>",
+            "env": {"HOSTNAME":"192.168.11.48", "MASTER_HOSTNAME":"192.168.11.48","MASTER_PORT":"10002","MODE":"run"},
 
+Debug(launch)-App<iris-jdbc-ingest-worker>をデバッグ実行。
+Debugger for java(extension)が Build failed, do you want to continue?と出力されるが無視する(Proceedを選択)
+
+6) ベンチマーク実行
 http://192.168.11.48:10000/ でUIを表示し、アプリを起動。
 
+Run Test押下直後は、データベースの拡張を行うので、若干時間がかかる。
 UIが固まるなど、動作がおかしくなったら、Eclipseのデバッグセッションを終了し、全コンテナを再起動してやり直し。
 user@ubuntu:~/git/irisdemo-demo-htap$ docker-compose -f docker-compose-enterprise-iris.yml restart 
 
-終了方法
+7) 終了方法
 全コンテナを削除。
 user@ubuntu:~/git/irisdemo-demo-htap$ docker-compose -f docker-compose-enterprise-iris.yml down
 
 ------------------------------------------------------------------------------------------------------
 query-workerをWindows+Eclipseでデバッグ実行する方法。
-注意)Eclipseでingest-workerプロジェクトをopenしたままこの操作を行うとおかしくなる。(null exception多発)
+注意)Eclipseでingest-workerプロジェクトをopenしたままこの操作を行うとおかしくなる(null exception多発)のでcloseすること。
 
-1) query-worker以外をコンテナ(Linux)で起動
-先ほどのデバッグで、INGESTION_JDBC_URLを変更していたら、元(htapirisdb)に戻すこと。
+1) docker-compose-enterprise-iris.ymlを編集する。
+
+1-1) コンテナの外部からJDBCアクセス可能にするために51773をexposeする。
 
   htapirisdb: 
     ports:
     - "51773:51773" # Allow JDBC connection from Windows
+
+1-2) query-workerが接続するJDBC接続先を示すURLを変更する
+注意)ingest-workerのデバッグで、INGESTION_JDBC_URLを変更していたら、元(htapirisdb)に戻すこと
 
   htapmaster:
       - INGESTION_JDBC_URL=jdbc:IRIS://htapirisdb:51773/USER
@@ -100,22 +114,25 @@ query-workerをWindows+Eclipseでデバッグ実行する方法。
       - CONSUMER_JDBC_URL=jdbc:IRIS://192.168.11.48:51773/USER
 
 その他はingestと同様。
-query-worker1以外を起動する。
+
+2) (デバッグ対象である)query-worker以外をコンテナ(Linux on VMWARE使用)で起動
 user@ubuntu:~/git/irisdemo-demo-htap$ docker-compose -f docker-compose-enterprise-iris.yml up -d  htapirisdb htapmaster htapui ingest-worker1
 
-2) 同様
+3) 同様
 
-3) Windows+Eclipseでiris-jdbc-query-workerをデバッグ実行する。
-
+4) BPの設定場所
 Break Pointを設定
 iris-jdbc-query-worker project
 com.irisdemo.htap.worker.iris.IRISWorker.startOneConsumer()　<= ここがメインの処理
+
+5) デバッグ実行
+5-1) Windows+Eclipseでデバッグ実行する。
 
 Debug ConfigurationsでSpring Boot Appを作成する。
 -Project: iris-jdbc-query-worker
 - Main type: com.irisdemo.htap.App
 - Environmentを追加
-start_ingestion_worker.shを参考に。
+start_query_worker.shを参考に。
 (https://github.com/IRISMeister/irisdemo-demo-htap/blob/master/standalone_scripts/iris-jdbc/start_query_worker.sh)
 
 HOSTNAME	192.168.11.9   (Windows10のIPアドレス)
@@ -123,4 +140,12 @@ MASTER_HOSTNAME	192.168.11.48
 MASTER_PORT	10002
 MODE	run  これしないとバックグラウンドになる
 
-以下、同様。
+5-2) vscode+RemoteSSHでデバッグ実行する。
+launch.jsonを参考に、env設定のHOSTNAME,MASTER_HOSTNAMEを共にLinuxのIPになるよう変更する。
+            "name": "Debug (Launch)-App<iris-jdbc-ingest-worker>",
+            "env": {"HOSTNAME":"192.168.11.48", "MASTER_HOSTNAME":"192.168.11.48","MASTER_PORT":"10002","MODE":"run"},
+
+Debug(launch)-App<iris-jdbc-query-worker>をデバッグ実行。
+
+6) 同様
+7) 同様
