@@ -49,11 +49,11 @@ exit_if_empty $irisWithMirroringAnswer
 if [ "$irisWithMirroringAnswer" == "yes" ];
 then
     DM_COUNT=2
-    ZONE="ap-northeast-1a,ap-northeast-1c"
+    ZONE="ap-northeast-1c,ap-northeast-1d"
     MIRROR="true"
 else
     DM_COUNT=1
-    ZONE="ap-northeast-1a"
+    ZONE="ap-northeast-1c"
     MIRROR="false"
 fi
 
