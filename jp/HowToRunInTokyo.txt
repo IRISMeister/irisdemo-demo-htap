@@ -28,8 +28,26 @@ $ cp ~/.aws/credentials irisdemo-demo-htap/ICM/ICMDurable/aws.credentials
 (credentialsは空のファイルでも良い)
 
 ◎SpeedTestのデプロイ実行手順. quicktest編
-run.shを実行してください。以降、デプロイの完了まで質問はありません。
-下記のカスタマイズ操作編の例で作成される構成情報に基づき、SpeedTestをデプロイします。
+事前にquicktestという名称で構成を作成してあります。(ICM/ICMDurable/Deployments/quicktest)
+これは、下記のカスタマイズ操作編の実行例で作成される構成を事前に作成したものです。
+run.shを実行するだけでSpeedTestをデプロイします。以降、デプロイの完了まで質問はされません。
+
+[ec2-user@ip-172-31-45-31 ~]$ cd irisdemo-demo-htap/jp
+[ec2-user@ip-172-31-45-31 jp]$ ./run.sh
+	・
+	・
+URL to SpeedTest | InterSystems IRIS Speed Test is at:
+        http://13.231.246.251
+If you are planning on deploying SAP HANA, AWS Aurora or any other AWS database, deploy them on the VPC_ID vpc-030a25384d1a351a1.
+Done!
+Exited icm container
+[ec2-user@ip-172-31-45-31 jp]$
+
+すべて成功していれば、この時点で提示されたURLからテスト実行が可能です。
+
+SpeedTest環境を全削除するには下記を実行してください。
+[ec2-user@ip-172-31-45-31 jp]$ ./unprovision.sh
+
 
 ◎SpeedTestのデプロイ実行手順. カスタマイズ操作編
 5段階からなる。
