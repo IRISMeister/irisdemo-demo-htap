@@ -21,4 +21,3 @@ docker run --rm -v $PWD/../ICM/ICMDurable:/ICMDurable -v $PWD:/shells --cap-add 
 #For interactive access
 #docker run --rm -it -v $PWD/../ICM/ICMDurable:/ICMDurable --cap-add SYS_TIME $ICM_REPO:$ICM_TAG 
 printf "\nExited icm container\n"
-printf "\nUse icm.sh to enter icm container again\n"
