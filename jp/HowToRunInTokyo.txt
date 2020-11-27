@@ -27,7 +27,11 @@ $ mv ~/iris.key irisdemo-demo-htap/ICM/ICMDurable/license/
 $ cp ~/.aws/credentials irisdemo-demo-htap/ICM/ICMDurable/aws.credentials
 (credentialsは空のファイルでも良い)
 
-◎SpeedTestのデプロイ実行手順
+◎SpeedTestのデプロイ実行手順. quicktest編
+run.shを実行してください。以降、デプロイの完了まで質問はありません。
+下記のカスタマイズ操作編の例で作成される構成情報に基づき、SpeedTestをデプロイします。
+
+◎SpeedTestのデプロイ実行手順. カスタマイズ操作編
 5段階からなる。
 1) icm起動
 2) setup.shにより実行用シェルを作成
