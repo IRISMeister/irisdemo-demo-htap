@@ -16,7 +16,7 @@ then
 fi
 
 printf "\nStarting ICM with $ICM_REPO:$ICM_TAG..."
-docker run --rm -v $PWD/../ICM/ICMDurable:/ICMDurable -v $PWD:/shells --cap-add SYS_TIME $ICM_REPO:$ICM_TAG /shells/icm-exec.sh
+docker run --rm -v $PWD/../ICM/ICMDurable:/ICMDurable -v $PWD:/shells --cap-add SYS_TIME $ICM_REPO:$ICM_TAG /shells/icm-run.sh
 #
 #For interactive access
 #docker run --rm -it -v $PWD/../ICM/ICMDurable:/ICMDurable --cap-add SYS_TIME $ICM_REPO:$ICM_TAG 
