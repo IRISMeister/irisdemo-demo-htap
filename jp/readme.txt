@@ -32,4 +32,8 @@ how_to_debug_in_eclipse/　
   about_query_worker.txt
   SELECT実施の核心部分。
 
-  
+
+本家とのマージ  
+git remote add upstream https://github.com/intersystems-community/irisdemo-demo-htap.git
+git fetch upstream
+git merge upstream/master
