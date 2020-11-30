@@ -22,10 +22,10 @@ ingest-worker(iris-jdbc-ingest-module)をWindows+Eclipseでデバッグ実行す
 
 もしレポジトリ名を変更していた場合は、下記を修正。
   ingest-worker1:
-    image: intersystemsdc/irisdemo-demo-htap:iris-jdbc-ingest-worker-version-2.5.0
+    image: intersystemsdc/irisdemo-demo-htap:iris-jdbc-ingest-worker-version-2.5.2
 
   query-worker1:
-    image: intersystemsdc/irisdemo-demo-htap:iris-jdbc-query-worker-version-2.5.0
+    image: intersystemsdc/irisdemo-demo-htap:iris-jdbc-query-worker-version-2.5.2
 
 ICM/ICMDurable/utils.shのfind_iris_database_size()を修正。初期DB拡張サイズを低めに設定。
     export DATABASE_SIZE_IN_GB=1
@@ -81,6 +81,8 @@ launch.jsonを参考に、env設定のHOSTNAME,MASTER_HOSTNAMEを共にLinuxのI
 
 Debug(launch)-App<iris-jdbc-ingest-worker>をデバッグ実行。
 Debugger for java(extension)が Build failed, do you want to continue?と出力されるが無視する(Proceedを選択)
+
+デバッグ出力は、パネル内のTERMINALのJava Debug Consoleから参照可能。
 
 6) ベンチマーク実行
 http://192.168.11.48:10000/ でUIを表示し、アプリを起動。

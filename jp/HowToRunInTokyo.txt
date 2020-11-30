@@ -176,9 +176,45 @@ Data Querying  Threads per workers:4
 [Results]で結果をファイル保存可能。
 ==================
 
-◎環境の削除手順
 
+◎環境へのSSH
+ICM環境にアクセスし、各ホストのpublic IPを確認する。
+[ec2-user@ip-172-31-45-31 jp]$ pwd
+/home/ec2-user/irisdemo-demo-htap/jp
+[ec2-user@ip-172-31-45-31 jp]$ ICM_TAG=$(cat ../ICM/ICMDurable/CONF_ICM_TAG)
+[ec2-user@ip-172-31-45-31 jp]$ ICM_REPO=$(cat ../ICM/ICMDurable/CONF_ICM_REPO)
+[ec2-user@ip-172-31-45-31 jp]$ docker run --rm -it -v $PWD/../ICM/ICMDurable:/ICMDurable --cap-add SYS_TIME $ICM_REPO:$ICM_TAG
+/ # cd ICMDurable/Deployments/quicktest/
+/ICMDurable/Deployments/quicktest # icm inventory
+Machine                        IP Address       DNS Name                                 Provider Region     Zone
+-------                        ----------       --------                                 -------- ------     ----
+quicktest-DM-IRISSpeedTest-0001 13.113.76.140    ec2-13-113-76-140.ap-northeast-1.compute AWS      ap-northeast-1 c
+quicktest-VM-IRISSpeedTest-0001 54.95.139.83     ec2-54-95-139-83.ap-northeast-1.compute. AWS      ap-northeast-1 c
+quicktest-VM-IRISSpeedTest-0002 54.168.106.60    ec2-54-168-106-60.ap-northeast-1.compute AWS      ap-northeast-1 c
+quicktest-VM-IRISSpeedTest-0003 18.181.252.182   ec2-18-181-252-182.ap-northeast-1.comput AWS      ap-northeast-1 c
+/ICMDurable/Deployments/quicktest # ctrl-D
+(DMはIRISインスタンスを、VMはUIやIngest-workerなどのコンテナを実行するホスト)
+
+[ec2-user@ip-172-31-45-31 jp]$ sudo ssh -i ../ICM/ICMDurable/keys/insecure ubuntu@54.95.139.83
+(private keyのオーナの関係でsudoが必要)
+ubuntu@ip-10-0-1-196:~$ docker ps
+CONTAINER ID        IMAGE                                                    COMMAND                  CREATED             STATUS                    PORTS                    NAMES
+698e6378fc79        intersystemsdc/irisdemo-demo-htap:ui-version-2.5.2       "docker-entrypoint.s…"   17 minutes ago      Up 17 minutes             0.0.0.0:80->4200/tcp     htapui
+33069981e6ff        intersystemsdc/irisdemo-demo-htap:master-version-2.5.2   "/app/run.sh"            19 minutes ago      Up 19 minutes (healthy)   0.0.0.0:8080->8080/tcp   htapmaster
+ubuntu@ip-10-0-1-196:~$
+
+◎環境の削除手順. quicktest編
+[ec2-user@ip-172-31-45-31 jp]$ ./unprovision.sh
+
+念のため、AWSのポータルでEC2インスタンスやEBSが消滅していることを確認する。
+ICM起動に使用したEC2インスタンスは残っているので、クラウドフォーメーションから削除する。
+
+◎環境の削除手順. カスタマイズ操作編
 テスト完了後、使用した全てのリソースを削除する。
+[ec2-user@ip-172-31-45-31 jp]$ ICM_TAG=$(cat ../ICM/ICMDurable/CONF_ICM_TAG)
+[ec2-user@ip-172-31-45-31 jp]$ ICM_REPO=$(cat ../ICM/ICMDurable/CONF_ICM_REPO)
+[ec2-user@ip-172-31-45-31 jp]$ docker run --rm -it -v $PWD/../ICM/ICMDurable:/ICMDurable --cap-add SYS_TIME $ICM_REPO:$ICM_TAG
+/ # cd ICMDurable/Deployments/mytest/
 /ICMDurable/Deployments/mytest # ./unprovision.sh
 Warning: This will delete the existing configuration, including all persistent data volumes.
 Type "yes" to confirm: [yes]
@@ -201,25 +237,7 @@ Deleting state
 Deleting instances.json
 /ICMDurable/Deployments/mytest # [ctrl+d]
 Exited icm container
-[ec2-user@ip-172-31-35-121 ICM]$
+[ec2-user@ip-172-31-45-31 jp]$
 
 念のため、AWSのポータルでEC2インスタンスやEBSが消滅していることを確認する。
-
 ICM起動に使用したEC2インスタンスは残っているので、クラウドフォーメーションから削除する。
-
-
-◎QuickTest
-インタラクト無しに事前構成通りにSpeedTestをデプロイする
-cd jp
-./run.sh
-
-#icmへのアクセス
-ICM_TAG=$(cat ../ICM/ICMDurable/CONF_ICM_TAG) 
-ICM_REPO=$(cat ../ICM/ICMDurable/CONF_ICM_REPO)
-docker run --rm -it -v $PWD/../ICM/ICMDurable:/ICMDurable --cap-add SYS_TIME $ICM_REPO:$ICM_TAG 
-icm inventory | grep VM-IRISSpeedTest-0001
-
-#停止方法
-docker run --rm -it -v $PWD/../ICM/ICMDurable:/ICMDurable --cap-add SYS_TIME $ICM_REPO:$ICM_TAG 
-cd ICMDurable/Deployments/quicktest/
-./unprovision.sh

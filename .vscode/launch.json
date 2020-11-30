@@ -27,7 +27,7 @@
         {
             "type": "java",
             "name": "Debug (Launch)-App<iris-jdbc-ingest-worker>",
-            "env": {"HOSTNAME":"192.168.120.128", "MASTER_HOSTNAME":"192.168.120.128","MASTER_PORT":"10002","MODE":"run"},
+            "env": {"HOSTNAME":"192.168.11.48", "MASTER_HOSTNAME":"192.168.11.48","MASTER_PORT":"10002","MODE":"run"},
             "request": "launch",
             "mainClass": "com.irisdemo.htap.App",
             "projectName": "iris-jdbc-ingest-worker"
@@ -35,7 +35,7 @@
         {
             "type": "java",
             "name": "Debug (Launch)-App<iris-jdbc-query-worker>",
-            "env": {"HOSTNAME":"192.168.120.128", "MASTER_HOSTNAME":"192.168.120.128","MASTER_PORT":"10002","MODE":"run"},
+            "env": {"HOSTNAME":"192.168.11.48", "MASTER_HOSTNAME":"192.168.11.48","MASTER_PORT":"10002","MODE":"run"},
             "request": "launch",
             "mainClass": "com.irisdemo.htap.App",
             "projectName": "iris-jdbc-query-worker"
