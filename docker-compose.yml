@@ -15,7 +15,7 @@ services:
       - htapmaster
     container_name: htapui
     hostname: htapui
-    image: intersystemsdc/irisdemo-demo-htap:ui-version-2.5.0
+    image: intersystemsdc/irisdemo-demo-htap:ui-version-2.5.2
     ports:
     - "10000:4200" # Where Node Will be listening
 
@@ -27,33 +27,37 @@ services:
     # version-1.4 is based on IRIS Community 2019.4
     # version-1.5.1 is based on IRIS Community 2020.1.0.197.0
     # version-1.5.2 is based on IRIS Community 2020.2.0.196.0
-    image: intersystemsdc/irisdemo-base-irisdb-community:version-1.5.2 
+    # version-1.7.1 is based on IRIS Community 2020.3.0.200.0
+    image: intersystemsdc/irisdemo-base-irisdb-community:version-1.7.1
     hostname: htapirisdb
     init: true
     container_name: htapirisdb
     ports:
     - "10001:52773" # 52773 is the webserver/management portal port: http://localhost:9092/csp/sys/UtilHome.csp
 
+  # Versions prior to 2020.3.0.200.0 would use the following JDBC URL with port 51773:
+  # jdbc:IRIS://htapirisdb:51773/USER
+  # With IRIS 2020.3.0.200.0, the port has changed to 1972
   htapmaster:
     depends_on: 
       - htapirisdb
     container_name: htapmaster
     hostname: htapmaster
     init: true
-    image: intersystemsdc/irisdemo-demo-htap:master-version-2.5.0
+    image: intersystemsdc/irisdemo-demo-htap:master-version-2.5.2
     ports:
       - "10002:8080" # Where Springboot Will be listening
     environment:
-      - MASTER_SPEEDTEST_TITLE=SpeedTest | IRIS Community 2020.2.0.196.0
+      - MASTER_SPEEDTEST_TITLE=SpeedTest | IRIS Community 2020.3.0.200.0
       - START_CONSUMERS=true
       - DISABLE_JOURNAL_FOR_DROP_TABLE=true
       - DISABLE_JOURNAL_FOR_TRUNCATE_TABLE=true
       - INGESTION_THREADS_PER_WORKER=2
       - INGESTION_BATCH_SIZE=1000
-      - INGESTION_JDBC_URL=jdbc:IRIS://htapirisdb:51773/USER
+      - INGESTION_JDBC_URL=jdbc:IRIS://htapirisdb:1972/USER
       - INGESTION_JDBC_USERNAME=SuperUser
       - INGESTION_JDBC_PASSWORD=sys
-      - CONSUMER_JDBC_URL=jdbc:IRIS://htapirisdb:51773/USER
+      - CONSUMER_JDBC_URL=jdbc:IRIS://htapirisdb:1972/USER
       - CONSUMER_JDBC_USERNAME=SuperUser
       - CONSUMER_JDBC_PASSWORD=sys
       - CONSUMER_THREADS_PER_WORKER=1
@@ -66,7 +70,7 @@ services:
     container_name: ingest-worker1
     hostname: ingest-worker1
     init: true
-    image: intersystemsdc/irisdemo-demo-htap:iris-jdbc-ingest-worker-version-2.5.0
+    image: intersystemsdc/irisdemo-demo-htap:iris-jdbc-ingest-worker-version-2.5.2
     ports:
       - "10003:8080" # Where Springboot Will be listening
     environment:
@@ -79,7 +83,7 @@ services:
     container_name: query-worker1
     hostname: query-worker1
     init: true
-    image: intersystemsdc/irisdemo-demo-htap:iris-jdbc-query-worker-version-2.5.0
+    image: intersystemsdc/irisdemo-demo-htap:iris-jdbc-query-worker-version-2.5.2
     ports:
       - "10004:8080" # Where Springboot Will be listening
     environment:
@@ -92,7 +96,7 @@ services:
   #   container_name: ingest-worker2
   #   hostname: ingest-worker2
   #   init: true
-  #   image: intersystemsdc/irisdemo-demo-htap:iris-jdbc-ingest-worker-version-2.5.0
+  #   image: intersystemsdc/irisdemo-demo-htap:iris-jdbc-ingest-worker-version-2.5.2
   #   ports:
   #     - "10005:8080" # Where Springboot Will be listening
   #   environment:
@@ -105,7 +109,7 @@ services:
   #   container_name: query-worker2
   #   hostname: query-worker2
   #   init: true
-  #   image: intersystemsdc/irisdemo-demo-htap:iris-jdbc-query-worker-version-2.5.0
+  #   image: intersystemsdc/irisdemo-demo-htap:iris-jdbc-query-worker-version-2.5.2
   #   ports:
   #     - "10006:8080" # Where Springboot Will be listening
   #   environment:

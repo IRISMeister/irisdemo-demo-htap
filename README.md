@@ -37,6 +37,11 @@ You can run the tests on AWS! Here are some results:
   - Was ingesting them 717.3% faster AEOT
   - Retrieved 313.6% more records
   - Was retrieving them 296.5% faster AEOT
+* [InterSystems IRIS x AWS RDS Oracle Enterprise 19.0](https://github.com/intersystems-community/irisdemo-demo-htap/blob/master/ICM/DOC/IRIS_x_AWSOracle.md). InterSystems IRIS:
+  - Ingested 402.1% more records	
+  - Was ingesting them 400.3% faster
+  - Retrieved 176.3% more records	
+  - Was retrieving them 176.2% faster
 
 You can run the tests on your own PC using Dockers (3 CPUs and 7GB of RAM)! Here are some results:
 * InterSystems IRIS x MySQL 8.0:
@@ -49,7 +54,7 @@ You can run the tests on your own PC using Dockers (3 CPUs and 7GB of RAM)! Here
 
 ## 1 - Running the Speed Test on AWS
 
-Follow [this link](/ICM/README.md) to see instructions on how to run this Speed Test on AWS comparing InterSystems IRIS with other databases such as SAP HANA and AWS Aurora.
+Follow [this link](https://github.com/intersystems-community/irisdemo-demo-htap/blob/master/ICM/README.md) to see instructions on how to run this Speed Test on AWS comparing InterSystems IRIS with other databases such as SAP HANA and AWS Aurora.
 
 ## 2 - How to run it on your PC
 
@@ -358,6 +363,7 @@ After running a test, the UI will allow you to download the test results as a CS
 
 There are other InterSystems IRIS demo applications that touch different subjects such as NLP, ML, Integration with AWS services, Twitter services, performance benchmarks etc. Here are some of them:
 * [HTAP Demo](https://github.com/intersystems-community/irisdemo-demo-htap) - Hybrid Transaction-Analytical Processing benchmark. See how fast InterSystems IRIS can insert and query at the same time. You will notice it is up to 20x faster than AWS Aurora!
+* [Kafka Retail Banking Demo](https://github.com/intersystems-community/irisdemo-demo-kafka) - Shows how InterSystems IRIS can be used to import AVRO Schemas from a Kafka's schema registry and consume Kafka events from a simulated retail banking application. It shows how InterSystems IRIS can be used to collate the events into a canonical model, apply data transformation and vocabulary normalization and bring people into the process when issues appear. 
 * [Fraud Prevention](https://github.com/intersystems-community/irisdemo-demo-fraudprevention) - Apply Machine Learning and Business Rules to prevent frauds in financial services transactions using InterSystems IRIS.
 * [Twitter Sentiment Analysis](https://github.com/intersystems-community/irisdemo-demo-twittersentiment) - Shows how InterSystems IRIS can be used to consume Tweets in realtime and use its NLP (natural language processing) and business rules capabilities to evaluate the tweet's sentiment and the metadata to make decisions on when to contact someone to offer support.
 * [HL7 Appointments and SMS (text messages) application](https://github.com/intersystems-community/irisdemo-demo-appointmentsms) -  Shows how InterSystems IRIS for Health can be used to parse HL7 appointment messages to send SMS (text messages) appointment reminders to patients. It also shows real time dashboards based on appointments data stored in a normalized data lake.
@@ -382,6 +388,7 @@ Here is the list of the supported databases so far:
   - AWS RDS MariaDB (production deployment) with replication
   - SAP HANA Express Edition 2.0 without replication
   - SAP Sybase ASE 16.0 SP03 PL08, public cloud edition, premium version, without replication
+  - AWS RDS Oracle (production deployment) with replication
 
 ## 12 - Report any Issues
   
