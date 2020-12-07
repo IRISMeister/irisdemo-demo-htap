@@ -23,14 +23,18 @@ buildtools.sh
 ICM/ICMDurable/utils.shにて、固定的にintersystemsdcになっている。
 
 ◎自前のレポジトリへの変更
-上記1)～3)のintersystemsdcをすべて書き換え。
+上記1)～3)のintersystemsdcをすべて書き換え。build.shを実行。
 いずれもオープンソースなのでパブリックレポジトリ上にpushしても良い。
 
 ◎IRIS本体のイメージ
 IRIS本体は、公式の配布イメージをそのまま使用しているため、カスタマイズの対象外となる。
 事前にIRIS側にPGやデータを仕込んでおくためには、IRISのイメージをビルド・独自イメージに変更する方法が必要。
 ただし、IRISに通常キットを使っている場合は、事前ビルドは出来ないので、PGのロードなどはデプロイ後になる。
+
 そのような処理を追加する場所は
 ICM/ICMDurable/Deployment/quicktest/deployiris.sh
 もしくはその元となる
 ICM/ICMDurable/Templates/template_deployiris.sh
+あるいは、デモの起動時(Run Testボタン押下時)にIRISに対して初期化処理を行うために実行されるメソッドである
+image-ingest-worker/projects/ingest-worker-project/iris-jdbc-ingest-worker/src/main/java/com/irisdemo/htap/worker/iris/IRISWorker.java
+prepareDatabaseForSpeedTest()を拡張するか。

@@ -5,6 +5,35 @@
 
 ====================================================================
 
+ローカル(コンテナ)で実行する方法
+
+1) コンテナ用のライセンスキーをIRISLicense/iris.keyに配置
+
+2) 起動方法
+user@ubuntu:~/git/irisdemo-demo-htap$ docker-compose -f docker-compose-enterprise-iris.yml up -d 
+user@ubuntu:~/git/irisdemo-demo-htap$ docker-compose -f docker-compose-enterprise-iris.yml ps
+     Name                   Command                       State                                 Ports
+----------------------------------------------------------------------------------------------------------------------------
+htapirisdb       /iris-main --key /irislice ...   Up (health: starting)   0.0.0.0:51773->51773/tcp, 0.0.0.0:10001->52773/tcp
+htapmaster       /app/run.sh                      Up (healthy)            0.0.0.0:10002->8080/tcp
+htapui           docker-entrypoint.sh /bin/ ...   Up                      0.0.0.0:10000->4200/tcp
+ingest-worker1   /app/run.sh                      Up (healthy)            0.0.0.0:10003->8080/tcp
+query-worker1    /app/run.sh                      Up (healthy)            0.0.0.0:10004->8080/tcp
+user@ubuntu:~/git/irisdemo-demo-htap$ 
+
+3) UIへのアクセス
+ポータルへのアクセス
+http://192.168.11.48:10001/csp/sys/%25CSP.Portal.Home.zen
+SuperUser/sys
+
+ベンチマーク画面へのアクセス
+http://192.168.11.48:10000/ 
+
+4) 停止方法
+user@ubuntu:~/git/irisdemo-demo-htap$ docker-compose -f docker-compose-enterprise-iris.yml down
+
+------------------------------------------------------------------------------------------------------
+
 ingest-worker(iris-jdbc-ingest-module)をWindows+Eclipseでデバッグ実行する方法。
 
 1) docker-compose-enterprise-iris.ymlを編集する。
