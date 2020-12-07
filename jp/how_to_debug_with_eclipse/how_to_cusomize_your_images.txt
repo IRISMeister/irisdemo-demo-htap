@@ -1,0 +1,36 @@
+◎イメージ名の一覧
+irisdemo-demo-htap:ui-version-2.5.2
+irisdemo-demo-htap:master-version-2.5.2
+irisdemo-demo-htap:iris-jdbc-ingest-worker-version-2.5.2
+irisdemo-demo-htap:iris-jdbc-query-worker-version-2.5.2
+
+
+◎イメージ名の使用箇所
+
+1) ローカルでの開発・デバッグ・実行環境
+docker-compose-enterprose-iris.ymlにて、固定的にintersystemsdcになっている。
+
+2) ローカルでの全ビルド時
+下記にて、固定的にintersystemsdcになっている。
+
+build.sh
+UI_IMAGE_NAME=intersystemsdc/irisdemo-demo-htap:ui-${DOCKER_TAG}
+
+buildtools.sh
+        IMAGE_FULL_NAME=intersystemsdc/irisdemo-demo-htap:${IMAGE_NAME}
+
+3) クラウドでの実行時
+ICM/ICMDurable/utils.shにて、固定的にintersystemsdcになっている。
+
+◎自前のレポジトリへの変更
+上記1)～3)のintersystemsdcをすべて書き換え。
+いずれもオープンソースなのでパブリックレポジトリ上にpushしても良い。
+
+◎IRIS本体のイメージ
+IRIS本体は、公式の配布イメージをそのまま使用しているため、カスタマイズの対象外となる。
+事前にIRIS側にPGやデータを仕込んでおくためには、IRISのイメージをビルド・独自イメージに変更する方法が必要。
+ただし、IRISに通常キットを使っている場合は、事前ビルドは出来ないので、PGのロードなどはデプロイ後になる。
+そのような処理を追加する場所は
+ICM/ICMDurable/Deployment/quicktest/deployiris.sh
+もしくはその元となる
+ICM/ICMDurable/Templates/template_deployiris.sh
