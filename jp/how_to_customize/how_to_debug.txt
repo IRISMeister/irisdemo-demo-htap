@@ -1,7 +1,55 @@
 前提
  Windows 10(ip address: 192.168.11.9)にて下記を動作させる
-   Ubuntu 18.04LTS (VMWAREの仮想マシン), ip address: 192.168.11.48
    Eclipseもしくはvscode(remote SSHで192.168.11.48に接続, Java Extension Pack導入済み)
+   Ubuntu 18.04LTS (VMWAREの仮想マシン)
+
+ Ubuntu (ip address: 192.168.11.48)
+$ java -version
+openjdk version "11.0.9.1" 2020-11-04
+OpenJDK Runtime Environment (build 11.0.9.1+1-Ubuntu-0ubuntu1.18.04)
+OpenJDK 64-Bit Server VM (build 11.0.9.1+1-Ubuntu-0ubuntu1.18.04, mixed mode, sharing)
+$ javac -version
+javac 11.0.9.1
+$ mvn -version
+Apache Maven 3.6.0
+Maven home: /usr/share/maven
+Java version: 11.0.9.1, vendor: Ubuntu, runtime: /usr/lib/jvm/java-11-openjdk-amd64
+Default locale: ja_JP, platform encoding: UTF-8
+OS name: "linux", version: "4.15.0-122-generic", arch: "amd64", family: "unix"
+$ docker version
+Client: Docker Engine - Community
+ Version:           19.03.13
+ API version:       1.40
+ Go version:        go1.13.15
+ Git commit:        4484c46d9d
+ Built:             Wed Sep 16 17:02:36 2020
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.13
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.13.15
+  Git commit:       4484c46d9d
+  Built:            Wed Sep 16 17:01:06 2020
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.3.7
+  GitCommit:        8fba4e9a7d01810a393d5d25a3621dc101981175
+ runc:
+  Version:          1.0.0-rc10
+  GitCommit:        dc9208a3303feef5b3839f4323d9beb36df0a9dd
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+$ docker-compose version
+docker-compose version 1.25.4, build 8d51620a
+docker-py version: 4.1.0
+CPython version: 3.7.5
+OpenSSL version: OpenSSL 1.1.0l  10 Sep 2019
+
 ====================================================================
 
 ローカル(コンテナ)で実行する方法
