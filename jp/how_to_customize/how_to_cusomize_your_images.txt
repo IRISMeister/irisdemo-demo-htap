@@ -1,0 +1,99 @@
+◎イメージ名の一覧
+irisdemo-demo-htap:ui-version-2.5.2
+irisdemo-demo-htap:master-version-2.5.2
+irisdemo-demo-htap:iris-jdbc-ingest-worker-version-2.5.2
+irisdemo-demo-htap:iris-jdbc-query-worker-version-2.5.2
+
+注) コンテナ実行時のIRISは公式のイメージ(containers.intersystems.com/intersystems/iris:xxx)をそのまま使用している
+
+◎イメージ名の指定箇所
+
+1) ローカルでの開発・デバッグ・実行時
+docker-compose-enterprose-iris.ymlにて、固定的にintersystemsdcになっている。
+
+2) ローカルでのビルド時
+下記にて、固定的にintersystemsdcになっている。
+
+build.sh
+UI_IMAGE_NAME=intersystemsdc/irisdemo-demo-htap:ui-${DOCKER_TAG}
+
+buildtools.sh
+        IMAGE_FULL_NAME=intersystemsdc/irisdemo-demo-htap:${IMAGE_NAME}
+
+3) クラウドでの実行時
+ICM/ICMDurable/utils.shにて、固定的にintersystemsdcになっている。
+
+◎自分用のレポジトリ名への変更
+上記1)～3)のintersystemsdcをすべて自分用のレポジトリ名に書き換えし、build.shを実行。
+(IRIS本体以外はいずれもオープンソースなのでパブリックレポジトリ上にpushしても良い)
+how_to_debug.txtを参考に、新しいイメージ名でローカル実行が可能であることを確認。
+
+◎(vscodeでの)コードの変更-compile-デバッグ実行
+
+how_to_debug.txtと同様の作業環境であることを想定している。IDEはvscodeを使用。
+
+1) 事前作業
+build.shはコンテナ内でmvnビルド実行しているためtarget下のファイルのオーナがrootになっている。それを削除しておかないと、以後の操作がファイルアクセス違反になるためchownを実行。
+$ sudo chown -fR $(id -u):$(id -g) `find ./ -user root`
+
+2) ingest-workerを修正をする場合の例
+2-1) how_to_debug.txtを参考にingest-worker以外のワーカを起動
+2-2) Javaを修正、コンパイル
+修正候補
+image-ingest-worker/projects/ingest-worker-project/iris-jdbc-ingest-worker/src/main/java/com/irisdemo/htap/worker/iris/IRISWorker.java
+startOneFeed()
+
+コンパイル
+mvn compile -f /home/iwamoto/irisdemo-demo-htap/image-ingest-worker/projects/ingest-worker-project/pom.xml
+
+2-3) how_to_debug.txtを参考にDebug実行
+もし、Build failed, do you want to continue?と出力されたら、FixでJava: Clean workspace cacheを選択
+
+それでもエラーが出るようならrootでcleanを実行してから再度mvn compileを実行
+sudo mvn clean -f /home/iwamoto/irisdemo-demo-htap/image-master/projects/master/pom.xml
+sudo mvn clean -f /home/iwamoto/irisdemo-demo-htap/image-ingest-worker/projects/ingest-worker-project/pom.xml
+sudo mvn clean -f /home/iwamoto/irisdemo-demo-htap/image-query-worker/projects/query-worker-project/pom.xml
+
+下記が出力されたら他のワーカが正しく起動しているか確認する
+2020-12-08 11:47:30.360  INFO 17143 --- [           main] com.irisdemo.htap.config.ConfigService   : Could not register: I/O error on GET request for "http://192.168.11.48:10002/master/ingestworker/register/192.168.11.48:8080": 接続を拒否されました (Connection refused); nested exception is java.net.ConnectException: 接続を拒否されました (Connection refused)
+
+2-4) 2-2へ。以後繰り返し。
+
+3) query-workerを修正をする場合の例
+3-1) how_to_debug.txtを参考にquery-worker以外のワーカを起動
+3-2) Javaを修正、コンパイル
+修正候補
+image-query-worker/projects/query-worker-project/iris-jdbc-query-worker/src/main/java/com/irisdemo/htap/worker/iris/IRISWorker.java
+startOneConsumer()
+
+コンパイル
+mvn compile -f /home/iwamoto/irisdemo-demo-htap/image-query-worker/projects/query-worker-project/pom.xml
+
+3-3) how_to_debug.txtを参考にDebug実行
+
+3-4) 3-2へ。以後繰り返し。
+
+◎コンテナimageの作成
+修正がすべて完了したら、build.shを実行。これでiris-jdbc-query-worker.jarなどのjar及びコンテナイメージが作成される。
+./images_builtに作成されたコンテナイメージ名が記録される。
+
+レポジトリにpushする方法
+$ source ./buildtools.sh
+$ push_images
+
+◎IRIS本体のイメージ
+IRIS本体は、公式の配布イメージをそのまま使用しているため、イメージのカスタマイズの対象外となる。
+(IRISの独自イメージをビルド・使用する事も可能だが、通常キット使用時と互換性が無い)
+
+PGのロードやデータの初期作成などの実行はIRISのデプロイ後になる。
+そのような処理を追加する場所の候補は
+
+1)クラウド使用時のみ
+ICM/ICMDurable/Deployment/quicktest/deployiris.sh
+もしくはその元となる
+ICM/ICMDurable/Templates/template_deployiris.sh
+
+2)ローカルPC,クラウド使用時
+デモの起動時(Run Testボタン押下時)にIRISに対して初期化処理を行うために実行されるメソッドである
+image-ingest-worker/projects/ingest-worker-project/iris-jdbc-ingest-worker/src/main/java/com/irisdemo/htap/worker/iris/IRISWorker.java
+prepareDatabaseForSpeedTest()を拡張する。

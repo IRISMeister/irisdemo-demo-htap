@@ -1,8 +1,7 @@
 前提
  Windows 10(ip address: 192.168.11.9)にて下記を動作させる
    Ubuntu 18.04LTS (VMWAREの仮想マシン), ip address: 192.168.11.48
-   Eclipseもしくはvscode(remote SSH,Java Extension Pack導入済み)
-
+   Eclipseもしくはvscode(remote SSHで192.168.11.48に接続, Java Extension Pack導入済み)
 ====================================================================
 
 ローカル(コンテナ)で実行する方法
@@ -34,7 +33,7 @@ user@ubuntu:~/git/irisdemo-demo-htap$ docker-compose -f docker-compose-enterpris
 
 ------------------------------------------------------------------------------------------------------
 
-ingest-worker(iris-jdbc-ingest-module)をWindows+Eclipseでデバッグ実行する方法。
+ingest-worker(iris-jdbc-ingest-module)をWindows+Eclipse/vscodeでデバッグ実行する方法。
 
 1) docker-compose-enterprise-iris.ymlを編集する。
 1-1) コンテナの外部からJDBCアクセス可能にするために51773をexposeする。
@@ -109,7 +108,9 @@ launch.jsonを参考に、env設定のHOSTNAME,MASTER_HOSTNAMEを共にLinuxのI
             "env": {"HOSTNAME":"192.168.11.48", "MASTER_HOSTNAME":"192.168.11.48","MASTER_PORT":"10002","MODE":"run"},
 
 Debug(launch)-App<iris-jdbc-ingest-worker>をデバッグ実行。
-Debugger for java(extension)が Build failed, do you want to continue?と出力されるが無視する(Proceedを選択)
+
+Debugger for java(extension)が Build failed, do you want to continue?と出力されるかもしれないが、ここでは無視する(Proceedを選択)。
+対処方法はhow_to_customize_your_images.txt。
 
 デバッグ出力は、パネル内のTERMINALのJava Debug Consoleから参照可能。
 
@@ -125,7 +126,7 @@ user@ubuntu:~/git/irisdemo-demo-htap$ docker-compose -f docker-compose-enterpris
 user@ubuntu:~/git/irisdemo-demo-htap$ docker-compose -f docker-compose-enterprise-iris.yml down
 
 ------------------------------------------------------------------------------------------------------
-query-workerをWindows+Eclipseでデバッグ実行する方法。
+query-workerをWindows+Eclipse/vscodeでデバッグ実行する方法。
 注意)Eclipseでingest-workerプロジェクトをopenしたままこの操作を行うとおかしくなる(null exception多発)のでcloseすること。
 
 1) docker-compose-enterprise-iris.ymlを編集する。

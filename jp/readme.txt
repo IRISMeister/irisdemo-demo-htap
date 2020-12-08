@@ -24,7 +24,7 @@ how_to_debug_in_eclipse/　
      ビルド時にiris jdbcドライバをローカルのmvn repoに追加する方法
 
   how_to_debug.txt
-  ingest-worker(iris-jdbc-ingest-module)をWindows+Eclipse環境でデバッグ実行する方法。
+  ingest-worker(iris-jdbc-ingest-module)をWindows+Eclipse/vscode環境でデバッグ実行する方法。
 
   about_ingest_worker.txt  
   INSERT実施の核心部分。
