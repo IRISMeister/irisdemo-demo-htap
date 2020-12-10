@@ -37,6 +37,7 @@ hs_err_pid*
 **/keys
 ICM/ICMDurable/Deployments/*
 !ICM/ICMDurable/Deployments/quicktest
+!ICM/ICMDurable/Deployments/quicktest2
 **/license/*.key
 **/ICM/ICMDurable/*.json
 **/ICM/ICMDurable/merge.cpf

@@ -1,0 +1,15 @@
+export DEPLOYMENT_FOLDER=/ICMDurable/Deployments/quicktest2
+export SSH_DIR=/ICMDurable/keys
+export TLS_DIR=/ICMDurable/keys
+export ICM_LABEL=quicktest2
+export IRIS_HOSTNAME=iris-quicktest2-DM-IRISSpeedTest-0001.weave.local
+export IRIS_ECP_HOSTNAME=iris-quicktest2-DM-IRISSpeedTest-0001.weave.local
+export HTAP_MASTERS=1
+export HTAP_INGESTION_WORKERS=1
+export HTAP_QUERY_WORKERS=1
+export MAX_CN=3
+export IRIS_KIT_LOCAL_PATH=/ICMDurable/IRISKit/IRIS-2020.1.0.215.0-lnxubuntux64.tar.gz
+export IRIS_KIT_REMOTE_PATH=/tmp/IRIS-2020.1.0.215.0-lnxubuntux64.tar.gz
+export IRIS_KIT=file://tmp/IRIS-2020.1.0.215.0-lnxubuntux64.tar.gz
+export CONTAINERLESS=true
+export NR_HUGE_PAGES=
