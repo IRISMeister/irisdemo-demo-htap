@@ -162,3 +162,17 @@ ICM/ICMDurable/Templates/template_deployiris.sh
 デモの起動時(Run Testボタン押下時)にIRISに対して初期化処理を行うために実行されるメソッドである
 image-ingest-worker/projects/ingest-worker-project/iris-jdbc-ingest-worker/src/main/java/com/irisdemo/htap/worker/iris/IRISWorker.java
 prepareDatabaseForSpeedTest()を拡張する。
+
+◎クラウドでのDeploy後の使用イメージ名の確認
+
+$ ./icm.sh
+/ # cd ICMDurable/Deployments/quicktest
+/ICMDurable/Deployments/quicktest # icm ssh --machine quicktest-VM-IRISSpeedTest-0001 --command "docker ps"
+Executing command 'docker ps' on host quicktest-VM-IRISSpeedTest-0001...
+-> Output in /ICMDurable/Deployments/quicktest/state/quicktest-VM-IRISSpeedTest/quicktest-VM-IRISSpeedTest-0001/ssh.out
+CONTAINER ID   IMAGE                                               COMMAND                  CREATED          STATUS                    PORTS                    NAMES
+15ef9ab5c416   変更後のレポジトリ名/irisdemo-demo-htap:ui-version-2.5.2       "docker-entrypoint.s…"   56 minutes ago   Up 56 minutes             0.0.0.0:80->4200/tcp     htapui
+ffad358cd353   変更後のレポジトリ名/irisdemo-demo-htap:master-version-2.5.2   "/app/run.sh"            58 minutes ago   Up 58 minutes (healthy)   0.0.0.0:8080->8080/tcp   htapmaster
+
+/ICMDurable/Deployments/quicktest # icm ssh --machine quicktest-VM-IRISSpeedTest-0002 --command "docker ps"
+/ICMDurable/Deployments/quicktest # icm ssh --machine quicktest-VM-IRISSpeedTest-0003 --command "docker ps"
