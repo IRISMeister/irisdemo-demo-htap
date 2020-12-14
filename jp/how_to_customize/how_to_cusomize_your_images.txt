@@ -63,7 +63,7 @@ startOneFeed()
 
 コンパイル
 (vscode編)
-mvn compile -f /home/iwamoto/irisdemo-demo-htap/image-ingest-worker/projects/ingest-worker-project/pom.xml
+mvn compile -f /home/user1/irisdemo-demo-htap/image-ingest-worker/projects/ingest-worker-project/pom.xml
 
 (Eclipse編)
 WIP
@@ -72,9 +72,9 @@ WIP
 もし、Build failed, do you want to continue?と出力されたら、FixでJava: Clean workspace cacheを選択
 
 それでもエラーが出るようならrootでcleanを実行してから再度mvn compileを実行
-sudo mvn clean -f /home/iwamoto/irisdemo-demo-htap/image-master/projects/master/pom.xml
-sudo mvn clean -f /home/iwamoto/irisdemo-demo-htap/image-ingest-worker/projects/ingest-worker-project/pom.xml
-sudo mvn clean -f /home/iwamoto/irisdemo-demo-htap/image-query-worker/projects/query-worker-project/pom.xml
+sudo mvn clean -f /home/user1/irisdemo-demo-htap/image-master/projects/master/pom.xml
+sudo mvn clean -f /home/user1/irisdemo-demo-htap/image-ingest-worker/projects/ingest-worker-project/pom.xml
+sudo mvn clean -f /home/user1/irisdemo-demo-htap/image-query-worker/projects/query-worker-project/pom.xml
 
 下記が出力されたら他のワーカが正しく起動しているか確認する
 2020-12-08 11:47:30.360  INFO 17143 --- [           main] com.irisdemo.htap.config.ConfigService   : Could not register: I/O error on GET request for "http://192.168.11.48:10002/master/ingestworker/register/192.168.11.48:8080": 接続を拒否されました (Connection refused); nested exception is java.net.ConnectException: 接続を拒否されました (Connection refused)
@@ -90,7 +90,7 @@ startOneConsumer()
 
 コンパイル
 (vscode編)
-mvn compile -f /home/iwamoto/irisdemo-demo-htap/image-query-worker/projects/query-worker-project/pom.xml
+mvn compile -f /home/user1/irisdemo-demo-htap/image-query-worker/projects/query-worker-project/pom.xml
 
 (Eclipse編)
 WIP
@@ -101,9 +101,9 @@ WIP
 
 ◎jarの作成
 (vscode編)
-mvn install -f /home/iwamoto/irisdemo-demo-htap/image-ingest-worker/projects/ingest-worker-project/pom.xml
-mvn install -f /home/iwamoto/irisdemo-demo-htap/image-query-worker/projects/query-worker-project/pom.xml
-mvn install -f /home/iwamoto/irisdemo-demo-htap/image-master/projects/master/pom.xml 
+mvn install -f /home/user1/irisdemo-demo-htap/image-ingest-worker/projects/ingest-worker-project/pom.xml
+mvn install -f /home/user1/irisdemo-demo-htap/image-query-worker/projects/query-worker-project/pom.xml
+mvn install -f /home/user1/irisdemo-demo-htap/image-master/projects/master/pom.xml 
 
 (Eclipse編)
 下記の各プロジェクトを選択した状態で、右クリック-Run As-Maven install
