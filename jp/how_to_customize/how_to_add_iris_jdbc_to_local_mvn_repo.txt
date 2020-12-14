@@ -1,4 +1,4 @@
-Eclipseから実行する場合
+◎Eclipseを使用してコンパイルする場合
 Project -> RunAs -> Run Configurations...
 
 Goal: 
@@ -6,7 +6,8 @@ install:install-file -Dfile=C:\InterSystems\IRIS\dev\java\lib\JDK18\intersystems
 install:install-file -Dfile=C:\InterSystems\IRIS\dev\java\lib\JDK18\intersystems-xep-3.1.0.jar -DgroupId=com.intersystems -DartifactId=intersystems-xep -Dversion=3.1.0 -Dpackaging=jar -DcreateChecksum=true
 
 
-CLIから実行する場合
+◎build.shを使用してコンパイルする場合
+CLIから実行する
 mvn install:install-file -Dfile=./intersystems-jdbc-3.1.0.jar \
 -DgroupId=com.intersystems \
 -DartifactId=intersystems-jdbc \
