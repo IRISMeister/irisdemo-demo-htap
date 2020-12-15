@@ -43,6 +43,13 @@ build-images.sh
 ICM/ICMDurable/utils.shにて、固定的にintersystemsdcになっている。
 複数個所あるので注意。
 
+クラウドでIRISコンテナ版を使用する場合は下記も修正。
+/ICMDurable/CONF_IRIS_PRIVATE_REPO
+/ICMDurable/CONF_IRIS_PRIVATE_REPO_TAG
+
+./setup.shで指定されたクレデンシャルでDockerHubへのログインを行う。
+そのため、(IRIS本体も含み)使用するコンテナイメージはすべてこのクレデンシャルでpull可能な状態である必要がある。
+
 ◎自分用のレポジトリ名への変更
 上記1)～3)のintersystemsdcをすべて自分用のレポジトリ名に書き換えし、build.shを実行。
 (IRIS本体以外はいずれもオープンソースなのでパブリックレポジトリ上にpushしても良い)
