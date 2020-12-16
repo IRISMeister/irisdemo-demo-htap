@@ -1,0 +1,44 @@
+{
+    "Provider": "AWS",
+    "Label": "quicktest3",
+    "Tag": "IRISSpeedTest",
+
+    "DataVolumeType": "io1",
+    "DataVolumeSize": "50",
+    "DataVolumeIOPS": "2500",
+
+    "WIJVolumeType": "io1",
+    "WIJVolumeSize": "50",
+    "WIJVolumeIOPS": "2500",
+
+    "Journal1VolumeType": "io1",
+    "Journal1VolumeSize": "200",
+    "Journal1VolumeIOPS": "2500",
+
+    "Journal2VolumeType": "io1",
+    "Journal2VolumeSize": "200",
+    "Journal2VolumeIOPS": "2500",
+    
+    "SSHUser": "ubuntu",
+    "SSHPublicKey": "/ICMDurable/keys/insecure-ssh2.pub",
+    "SSHPrivateKey": "/ICMDurable/keys/insecure",
+    "TLSKeyDir": "/ICMDurable/keys/",
+    "DockerImage": "dpmeister/irisdemo:2020.1.0.215.0",
+    "DockerUsername": "xxx",
+    "DockerPassword": "yyy",
+    "LicenseDir": "/ICMDurable/license/",
+    "Region": "ap-northeast-1",
+    "Zone": "ap-northeast-1c,ap-northeast-1d",
+    "DockerVersion": "5:19.03.8~3-0~ubuntu-bionic",
+    "AMI": "ami-05855b7c54f91a1ae",
+    "InstanceType": "m4.2xlarge",
+    "Credentials": "/ICMDurable/aws.credentials",
+    "SystemMode": "TEST",
+    "ISCPassword": "sys",
+    "Namespace": "SPEEDTEST",
+    "Mirror": "true",
+    "UserCPF": "/ICMDurable/Deployments/quicktest3/merge.cpf",
+    "Containerless": "false",
+    "ISCglobals": "0,0,23552,0,0,0",
+    "KitURL": "<KitURL>"
+}
