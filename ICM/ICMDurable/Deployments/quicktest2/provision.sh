@@ -27,10 +27,11 @@ exit_if_terraform_error "Provisioning the infrastructure failed."
 
 printf "\n\n${GREEN}Installing docker on the VM nodes...${RESET}"
 printf "\n\n${GREEN}Running preInstallDocker.sh...\n${RESET}"
+icm ssh --role VM --command "apt update -y"
 icm ssh --role VM --command "./ICM/preInstallDocker.sh"
 exit_if_error "preInstallDocker.sh failed on VM machines"
 
-sleep 5
+sleep 10
 
 printf "\n\n${GREEN}Running installDockerCE.sh...\n${RESET}"
 icm ssh --role VM --command "export DOCKER_STORAGE_DRIVER=devicemapper && ./ICM/installDockerCE.sh"
