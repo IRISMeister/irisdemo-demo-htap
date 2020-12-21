@@ -24,7 +24,8 @@ printf "\n\n\t ${YELLOW}oracle${RESET}  - AWS Oracle"
 
 printf "\n\n${RESET}"
 
-read SPEED_TEST_TO_DEPLOY
+#read SPEED_TEST_TO_DEPLOY
+SPEED_TEST_TO_DEPLOY=iris
 case $SPEED_TEST_TO_DEPLOY in
     iris)
         printf "\n\n${GREEN}Deploying HTAP demo for InterSystems IRIS...${RESET}\n\n"
