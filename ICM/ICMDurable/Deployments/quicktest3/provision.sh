@@ -27,7 +27,7 @@ exit_if_terraform_error "Provisioning the infrastructure failed."
 
 printf "\n\n${GREEN}Installing docker on the VM nodes...${RESET}"
 printf "\n\n${GREEN}Running preInstallDocker.sh...\n${RESET}"
-icm ssh --role VM --command "apt update -y"
+icm ssh --role VM --command "sudo apt update -y"
 icm ssh --role VM --command "./ICM/preInstallDocker.sh"
 exit_if_error "preInstallDocker.sh failed on VM machines"
 
