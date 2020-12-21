@@ -38,6 +38,7 @@
     "ISCPassword": "sys",
     "Namespace": "SPEEDTEST",
     "Mirror": "true",
+    "Overlay": "host",
     "UserCPF": "/ICMDurable/Deployments/quicktest3/merge.cpf",
     "Containerless": "false",
     "ISCglobals": "0,0,23552,0,0,0",
