@@ -58,7 +58,7 @@ public class IRISWorker implements IWorker
 	        Properties connectionProperties = new Properties();
 	        connectionProperties.setProperty("user", config.getConsumptionJDBCUserName());
 	        connectionProperties.setProperty("password", config.getConsumptionJDBCPassword());
-	
+
 	        dataSourceCache = new DriverManagerDataSource(config.getConsumptionJDBCURL(), connectionProperties);
 		}
         
@@ -144,6 +144,7 @@ public class IRISWorker implements IWorker
 				}
 			}
 */
+			preparedStatement = connection.prepareStatement(config.getQueryByIdStatement());
 			String sql2="SELECT max(seqno) FROM SpeedTest.Account";
 			PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
 			String sql3="SELECT * FROM SpeedTest.Account where seqno>?-10 and seqno<?";
@@ -153,6 +154,36 @@ public class IRISWorker implements IWorker
 			long maxseqno=0;
 			while(workerSemaphore.green())
 			{
+				for (idIndex = 0; idIndex<4; idIndex++)
+				{					
+					t0 = System.currentTimeMillis();
+					preparedStatement.setString(1, IDs[idIndex]);
+					rs = preparedStatement.executeQuery();
+					
+					t1= System.currentTimeMillis();
+										
+					rsmd = rs.getMetaData();
+	                rowSizeInBytes=0;
+	                rowCount=0;
+					
+	                t2= System.currentTimeMillis();                
+	                
+	                colnumCount = rsmd.getColumnCount();
+	                
+	                while (rs.next()) 
+	                {
+	                	rowCount++;
+	                    for (int column=1; column<=colnumCount; column++) 
+	                    {
+	                    	// Approximate size
+	                    	rowSizeInBytes += rs.getString(column).getBytes().length;
+	                    }
+	                 }
+					 t3= System.currentTimeMillis();
+					 
+					 accumulatedMetrics.addToStats(t3-t0, rowCount, rowSizeInBytes);
+				}
+
 				t0 = System.currentTimeMillis();
 				rs = preparedStatement2.executeQuery();
 				rs.next();
