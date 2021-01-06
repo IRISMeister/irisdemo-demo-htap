@@ -103,47 +103,7 @@ public class IRISWorker implements IWorker
 		
 		try 
 		{
-/*			
-			preparedStatement = connection.prepareStatement(config.getQueryByIdStatement());
-			
-			while(workerSemaphore.green())
-			{
-				for (idIndex = 0; idIndex<4; idIndex++)
-				{					
-					t0 = System.currentTimeMillis();
-					preparedStatement.setString(1, IDs[idIndex]);
-					rs = preparedStatement.executeQuery();
-					
-					t1= System.currentTimeMillis();
-										
-					rsmd = rs.getMetaData();
-	                rowSizeInBytes=0;
-	                rowCount=0;
-					
-	                t2= System.currentTimeMillis();                
-	                
-	                colnumCount = rsmd.getColumnCount();
-	                
-	                while (rs.next()) 
-	                {
-	                	rowCount++;
-	                    for (int column=1; column<=colnumCount; column++) 
-	                    {
-	                    	// Approximate size
-	                    	rowSizeInBytes += rs.getString(column).getBytes().length;
-	                    }
-	                 }
-					 t3= System.currentTimeMillis();
-					 
-					 accumulatedMetrics.addToStats(t3-t0, rowCount, rowSizeInBytes);
-				}
-				
-				if (config.getConsumptionTimeBetweenQueriesInMillis()>0)
-				{
-					Thread.sleep(config.getConsumptionTimeBetweenQueriesInMillis());
-				}
-			}
-*/
+
 			preparedStatement = connection.prepareStatement(config.getQueryByIdStatement());
 			String sql2="SELECT max(seqno) FROM SpeedTest.Account";
 			PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
