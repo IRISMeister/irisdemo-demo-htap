@@ -1,5 +1,12 @@
+[config]
+globals=0,0,128,0,0,0
+routines=64
+asyncwij=8
+wduseasyncio=1
+
 [Startup]
 PasswordHash=a647ce65fda7c09890288ebb8a899b7f48f70fe5,2rv3vp7v
+DefaultPort=51773
 
 [SQL]
 TimePrecision=6

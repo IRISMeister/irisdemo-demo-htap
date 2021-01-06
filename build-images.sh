@@ -7,7 +7,7 @@ source ./buildtools.sh
 build_images() {
 PROJECTS_FOLDER=$PWD/$1/projects
 
-for JAR_FILE_WITH_PATH in $(find $PROJECTS_FOLDER -name *.jar); do
+for JAR_FILE_WITH_PATH in $(find $PROJECTS_FOLDER -name *iris*.jar -o -name *mysql*.jar -o -name *master*.jar); do
   
 	JAR_FILE_ORG=${JAR_FILE_WITH_PATH##*[/]}
 	JAR_FILE=${JAR_FILE_ORG%-*}.jar
@@ -26,7 +26,7 @@ for JAR_FILE_WITH_PATH in $(find $PROJECTS_FOLDER -name *.jar); do
 	cp -f $JAR_FILE_WITH_PATH $PROJECTS_FOLDER/app.jar
 	exit_if_error "Could not copy file $JAR_FILE_WITH_PATH to $PROJECTS_FOLDER/app.jar"
 
-	IMAGE_FULL_NAME=intersystemsdc/irisdemo-demo-htap:${IMAGE_NAME}
+	IMAGE_FULL_NAME=dpmeister/irisdemo-demo-htap:${IMAGE_NAME}
 	docker build --build-arg VERSION=${DOCKER_TAG} -t ${IMAGE_FULL_NAME} ./$1
 	exit_if_error "build of ${IMAGE_NAME} failed."
 
@@ -52,9 +52,9 @@ build_images "image-master"
 build_images "image-ingest-worker"
 build_images "image-query-worker"
 
-UI_IMAGE_NAME=intersystemsdc/irisdemo-demo-htap:ui-${DOCKER_TAG}
-docker build -t $UI_IMAGE_NAME ./image-ui
-echo $UI_IMAGE_NAME >> ./images_built
+##UI_IMAGE_NAME=intersystemsdc/irisdemo-demo-htap:ui-${DOCKER_TAG}
+##docker build -t $UI_IMAGE_NAME ./image-ui
+##echo $UI_IMAGE_NAME >> ./images_built
 
 
 

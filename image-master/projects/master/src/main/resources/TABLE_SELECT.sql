@@ -1,5 +1,6 @@
 Select
 	account_id, 
+	seqno,
 	brokerageaccountnum, 
 	org, 
 	status, 

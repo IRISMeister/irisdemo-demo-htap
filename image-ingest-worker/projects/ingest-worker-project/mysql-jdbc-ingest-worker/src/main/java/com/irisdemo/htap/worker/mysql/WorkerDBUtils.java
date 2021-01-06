@@ -127,7 +127,7 @@ public class WorkerDBUtils
 			case java.sql.Types.BIGINT:
 				for (int i=0; i<1000; i++)
 				{
-					paramRandomValues[column][i] = Math.round(Math.random()*Long.MAX_VALUE);
+					paramRandomValues[column][i] = Math.round(Math.random()*10000);
 					paramSizeInBytes[column][i] = Long.BYTES;
 				}
 				break;
@@ -154,9 +154,13 @@ public class WorkerDBUtils
 		param1 = threadPrefix + "" + recordNum;
 		preparedStatement.setObject(1, param1);
 		long recordSize=Character.BYTES+Long.BYTES;
-		
+
+		// param 2:
+		preparedStatement.setLong(2,recordNum);
+		recordSize+=Long.BYTES;
+
 		// rest of parameters:
-		for(int param=2; param <= parameterCount; param++)
+		for(int param=3; param <= parameterCount; param++)
 		{
 			randomValue = paramRandomValues[param][randomIndex];
 			
@@ -172,7 +176,59 @@ public class WorkerDBUtils
 	{
 		PreparedStatement statement = connection.prepareStatement(config.getTableCreateStatement());
 	    statement.execute();
-	    statement.close();
+		statement.close();
+
+	    String sql="CREATE INDEX idx1 on SpeedTest.Account (repteamno)";
+		statement = connection.prepareStatement(sql);
+	    statement.execute();
+		statement.close();
+
+        sql="CREATE INDEX idx2 on SpeedTest.Account (seqno)";
+		statement = connection.prepareStatement(sql);
+	    statement.execute();
+		statement.close();
+
+	    // Populate dummy master table
+	    String sql1="DROP TABLE SpeedTest.MASTER";
+		PreparedStatement statement1 = connection.prepareStatement(sql1);
+		try
+		{
+		    statement1.execute();
+		}
+		catch (SQLException exception)
+		{
+			if (exception.getErrorCode()==30) //Table or view not found
+			{
+				
+			}
+			else if (exception.getMessage().startsWith("Unknown table"))
+			{
+				
+			}
+			else
+			{
+				throw exception;
+			}
+			
+		}
+	    statement1.close();
+	    
+	    String sql2="CREATE TABLE SpeedTest.MASTER (load_version_no BIGINT PRIMARY KEY, NAME VARCHAR(50), p1 BIGINT, p2 BIGINT, p3 BIGINT, p4 BIGINT, p5 BIGINT, p6 BIGINT, p7 BIGINT, p8 BIGINT, p9 BIGINT, p10 BIGINT)";
+		PreparedStatement statement2 = connection.prepareStatement(sql2);
+	    statement2.execute();
+	    statement2.close();
+
+	    String sql3="INSERT INTO SpeedTest.MASTER (load_version_no, NAME,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement statement3 = connection.prepareStatement(sql3);
+		for (int i=1;i<=10000;i++) {
+			statement3.setInt(1, i);
+			statement3.setString(2, "AAAAA"+i);
+			for (int j=0;j<10;j++) {
+				statement3.setLong(3+j, Math.round(Math.random()*Long.MAX_VALUE));
+			}
+			statement3.execute();
+		}
+	    statement3.close();
 	}
     
 	public void dropTable(Connection connection) throws SQLException

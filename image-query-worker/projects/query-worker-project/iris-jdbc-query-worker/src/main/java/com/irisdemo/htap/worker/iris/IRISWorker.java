@@ -83,7 +83,7 @@ public class IRISWorker implements IWorker
 		for (idIndex = 0; idIndex<config.getConsumptionNumOfKeysToFetch(); idIndex++)
 		{
 			IDs[idIndex]="W1A"+idIndex;
-		}		 	 
+		}		 
 		
 		/*
 		 *  Each thread will run queries on the first 4 elements of the array.
@@ -103,6 +103,7 @@ public class IRISWorker implements IWorker
 		
 		try 
 		{
+/*			
 			preparedStatement = connection.prepareStatement(config.getQueryByIdStatement());
 			
 			while(workerSemaphore.green())
@@ -114,13 +115,7 @@ public class IRISWorker implements IWorker
 					rs = preparedStatement.executeQuery();
 					
 					t1= System.currentTimeMillis();
-					
-					/* 
-					 * The customer said that it is not fair if we just read the data and
-					 * don't do anything with it. So we will just compute the approximate size of
-					 * the data we have read to show "proof of work".
-					 */
-					
+										
 					rsmd = rs.getMetaData();
 	                rowSizeInBytes=0;
 	                rowCount=0;
@@ -148,6 +143,53 @@ public class IRISWorker implements IWorker
 					Thread.sleep(config.getConsumptionTimeBetweenQueriesInMillis());
 				}
 			}
+*/
+			String sql2="SELECT max(seqno) FROM SpeedTest.Account";
+			PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
+			String sql3="SELECT * FROM SpeedTest.Account where seqno>?-10 and seqno<?";
+			PreparedStatement preparedStatement3 = connection.prepareStatement(sql3);
+			String sql4="SELECT sum(load_version_no) FROM SpeedTest.Account where seqno>?-10 and seqno<?";
+			PreparedStatement preparedStatement4 = connection.prepareStatement(sql4);
+			long maxseqno=0;
+			while(workerSemaphore.green())
+			{
+				t0 = System.currentTimeMillis();
+				rs = preparedStatement2.executeQuery();
+				rs.next();
+				maxseqno=rs.getLong(1);
+
+				preparedStatement3.setLong(1, maxseqno);
+				preparedStatement3.setLong(2, maxseqno);
+				rs = preparedStatement3.executeQuery();
+				rsmd = rs.getMetaData();
+				rowSizeInBytes=0;
+				rowCount=0;
+
+				colnumCount = rsmd.getColumnCount();
+				while (rs.next()) 
+				{
+					rowCount++;
+					for (int column=1; column<=colnumCount; column++) 
+					{
+						// Approximate size
+						rowSizeInBytes += rs.getString(column).getBytes().length;
+					}
+				 }
+
+				 preparedStatement4.setLong(1, maxseqno);
+				 preparedStatement4.setLong(2, maxseqno);
+				 rs = preparedStatement4.executeQuery();
+				 rs.next();
+
+				t3= System.currentTimeMillis();
+				accumulatedMetrics.addToStats(t3-t0, rowCount, rowSizeInBytes);
+
+				if (config.getConsumptionTimeBetweenQueriesInMillis()>0)
+				{
+					Thread.sleep(config.getConsumptionTimeBetweenQueriesInMillis());
+				}
+			}
+
 		} 
 		catch (SQLException sqlException) 
 		{

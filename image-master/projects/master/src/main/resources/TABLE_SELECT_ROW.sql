@@ -1,5 +1,6 @@
 Select
 	account_id, 
+	seqno,
 	brokerageaccountnum, 
 	org, 
 	status, 
@@ -16,6 +17,8 @@ Select
 	createdby, 
 	createdts, 
 	group_id, 
-	load_version_no
-from SpeedTest.Account
+	a.load_version_no,
+	m.NAME
+from SpeedTest.Account a
+left outer join SpeedTest.MASTER m on a.load_version_no=m.load_version_no
 where account_id=?

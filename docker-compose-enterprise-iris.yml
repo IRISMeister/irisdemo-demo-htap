@@ -20,7 +20,7 @@ services:
     # We can't use clean IRIS because its HEALTHCHECK period is too long.
     # So the downloadiris.sh script builds a new image that fixes the HEALTHCHECK
     # and pushes it to our private repository so we can pull it here.
-    image: containers.intersystems.com/intersystems/iris:2020.1.0.215.0
+    image: containers.intersystems.com/intersystems/iris:2020.4.0.524.0
     hostname: htapirisdb
     command: --key /irislicense/iris.key
     init: true
@@ -36,6 +36,7 @@ services:
     environment:
       - ISC_DATA_DIRECTORY=/home/irisowner/IRIS
       - ISC_CPF_MERGE_FILE=/cpf/merge.cpf
+      - TZ=JST-9
 
   htapmaster:
     depends_on: 
@@ -43,7 +44,7 @@ services:
     container_name: htapmaster
     hostname: htapmaster
     init: true
-    image: intersystemsdc/irisdemo-demo-htap:master-version-2.5.2
+    image: dpmeister/irisdemo-demo-htap:master-version-2.5.2
     ports:
       - "10002:8080" # Where Springboot Will be listening
     environment:
@@ -54,11 +55,11 @@ services:
       - INGESTION_THREADS_PER_WORKER=1
       - INGESTION_BATCH_SIZE=1000
       - INGESTION_JDBC_URL=jdbc:IRIS://htapirisdb:51773/USER
-      #- INGESTION_JDBC_URL=jdbc:IRIS://192.168.11.48:51773/USER
+      #- INGESTION_JDBC_URL=jdbc:IRIS://192.168.11.12:51773/USER
       - INGESTION_JDBC_USERNAME=SuperUser
       - INGESTION_JDBC_PASSWORD=sys
       - CONSUMER_JDBC_URL=jdbc:IRIS://htapirisdb:51773/USER
-      #- CONSUMER_JDBC_URL=jdbc:IRIS://192.168.11.48:51773/USER
+      #- CONSUMER_JDBC_URL=jdbc:IRIS://192.168.11.12:51773/USER
       - CONSUMER_JDBC_USERNAME=SuperUser
       - CONSUMER_JDBC_PASSWORD=sys
       - CONSUMER_THREADS_PER_WORKER=1
@@ -71,7 +72,7 @@ services:
     container_name: ingest-worker1
     hostname: ingest-worker1
     init: true
-    image: intersystemsdc/irisdemo-demo-htap:iris-jdbc-ingest-worker-version-2.5.2
+    image: dpmeister/irisdemo-demo-htap:iris-jdbc-ingest-worker-version-2.5.2
     ports:
       - "10003:8080" # Where Springboot Will be listening
     environment:
@@ -84,7 +85,7 @@ services:
     container_name: query-worker1
     hostname: query-worker1
     init: true
-    image: intersystemsdc/irisdemo-demo-htap:iris-jdbc-query-worker-version-2.5.2
+    image: dpmeister/irisdemo-demo-htap:iris-jdbc-query-worker-version-2.5.2
     ports:
       - "10004:8080" # Where Springboot Will be listening
     environment:

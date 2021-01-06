@@ -1,6 +1,7 @@
 CREATE TABLE SpeedTest.Account
 (
 	account_id VARCHAR(36) PRIMARY KEY,
+	seqno BIGINT,
 	brokerageaccountnum VARCHAR(16),
 	org VARCHAR(50),
 	status VARCHAR(10),
