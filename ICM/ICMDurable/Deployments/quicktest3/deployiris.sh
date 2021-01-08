@@ -30,6 +30,20 @@ else
     # icm ssh --role DM -command "sudo reboot"
     # exit_if_error "Rebooting servers after huge page configuration failed."
 
+    # 2nd DM fail to start sometimes.
+    #
+    # log: 01/08/21-05:34:38:591 (2086) 0 [Database.MountedRW] Mounted database /irissys/data/IRIS/mgr/irislocaldata/ (SFN 2) read-write.
+    # This copy of InterSystems IRIS has been licensed for use exclusively by:
+    # Local license key file not found.
+    # Copyright (c) 1986-2020 by InterSystems Corporation
+    # Any other use is a violation of your license agreement
+    # Error: ERROR #9382: Sharding is unavailable for current license - Shutting down the system : $zu(56,2)=$Id: //iris/2020.3.0/kernel/common/src/journal.c#1 $ 9783 0Initializ
+    # ing IRIS, please wait...
+    # Merging IRIS, please wait...
+    # Starting IRIS
+    # An error was detected during InterSystems IRIS startup.
+    # ** Startup aborted **
+    # [ERROR] Command "iris start IRIS quietly" exited with status 256
     icm run -options "--cap-add IPC_LOCK --security-opt=seccomp=unconfined"
     exit_if_error "Deploying container based IRIS failed."
 fi

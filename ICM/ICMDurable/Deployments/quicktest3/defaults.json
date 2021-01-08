@@ -24,7 +24,7 @@
     "SSHPrivateKey": "/ICMDurable/keys/insecure",
     "TLSKeyDir": "/ICMDurable/keys/",
     "DockerRegistry":"containers.intersystems.com",
-    "DockerImage": "containers.intersystems.com/intersystems/iris:2020.3.0.221.0",
+    "DockerImage": "containers.intersystems.com/intersystems/iris:2020.4.0.524.0",
     "DockerUsername": "credential for containers.intersystems.com",
     "DockerPassword": "credential for containers.intersystems.com",
     "LicenseDir": "/ICMDurable/license/",
