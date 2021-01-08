@@ -17,13 +17,5 @@
             "Role": "AR",
             "Count": "1",
             "DockerImage": "containers.intersystems.com/intersystems/arbiter:2020.3.0.221.0"
-        },
-        {
-            "Role": "WS",
-            "Count": "2",
-            "DockerImage": "containers.intersystems.com/intersystems/webgateway:2020.3.0.221.0",
-            "ApplicationPath": "/acme",
-            "LoadBalancer": "true",
-            "AlternativeServers": "LoadBalancing"
-        }        
+        }
 ]
