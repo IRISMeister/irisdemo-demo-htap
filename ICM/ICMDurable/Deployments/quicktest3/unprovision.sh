@@ -1,7 +1,7 @@
 #!/bin/sh
 source ./env.sh
 
-icm unprovision -cleanUp --stateDir state
+icm unprovision -cleanUp -force --stateDir state
 
 rm -f ./.provisionHasBeenRun
 rm -f ./.CNcount
