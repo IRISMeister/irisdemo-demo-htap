@@ -30,6 +30,9 @@ case $SPEED_TEST_TO_DEPLOY in
     iris)
         printf "\n\n${GREEN}Deploying HTAP demo for InterSystems IRIS...${RESET}\n\n"
 
+        # For versions beyond 2020.4.  override 51773 defined in ICMDurable/base_env.sh
+        export IRIS_PORT=1972
+        export IRIS_ECP_PORT=1972
         deploy "iris" "SpeedTest | InterSystems IRIS"
 
         getVPC
