@@ -1,9 +1,9 @@
 
     [
         {
-        "Role": "DM",
-        "Count": "2",
-        "LicenseKey": "iris.key"
+            "Role": "DM",
+            "Count": "2",
+            "LicenseKey": "iris.container.key"
         },
         {
             "Role": "VM",

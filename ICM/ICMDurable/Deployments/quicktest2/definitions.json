@@ -4,8 +4,7 @@
         "Role": "DM",
         "Count": "2",
         "LicenseKey": "iris.key"
-        } 
-,
+        },
         {
             "Role": "VM",
             "Count": "3",
