@@ -193,7 +193,12 @@ deploy()
         IRIS_DM_MACHINE_NAME="${ICM_LABEL}-DM-IRISSpeedTest-0001"
 
         internal_ip $IRIS_DM_MACHINE_NAME
-        IRIS_HOSTNAME=$INTERNAL_IP        
+        IRIS_HOSTNAME=$INTERNAL_IP
+        # Node level shard        
+        if [ -z "$IRIS_HOSTNAME" ]; then
+            internal_ip ${ICM_LABEL}-DATA-IRISSpeedTest-0001
+            IRIS_HOSTNAME=$INTERNAL_IP
+        fi
 
         INGESTION_JDBC_URL=jdbc:IRIS://${IRIS_HOSTNAME}:${IRIS_PORT}/SPEEDTEST
 
