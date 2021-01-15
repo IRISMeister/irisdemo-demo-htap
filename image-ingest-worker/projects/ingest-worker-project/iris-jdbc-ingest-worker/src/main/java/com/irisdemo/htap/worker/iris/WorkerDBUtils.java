@@ -254,7 +254,10 @@ public class WorkerDBUtils
 			"		Set tSC = oException.AsStatus() \n" +
 			"	} \n" +
 			"	Set $Namespace=tNS \n" +
-			"	If $$$ISERR(tSC) Quit $System.Status.GetErrorText(tSC) \n" +
+			"	// There is no use to try to expand Data shard DB locally. \n" +
+			"	// It fails because there is no matching local DB. \n" +
+			"	// There should be better way to handle this.\n" +
+			"	If $$$ISERR(tSC) Quit 1  //$System.Status.GetErrorText(tSC) \n" +
 			"	Quit 1 \n" +
 			"}\n";
 
